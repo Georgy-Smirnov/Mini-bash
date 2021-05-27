@@ -56,4 +56,5 @@ typedef struct		s_all
 }					t_all;
 
 void				manage_export(char *name_varible, char *value_varible, char **envp, t_all *all);
+//asdasdasdasdasdas
 #endif
