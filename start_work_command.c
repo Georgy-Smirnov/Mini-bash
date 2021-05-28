@@ -47,10 +47,12 @@ void	bzero_t_all(t_all *all)
 {
 	all->com.exp = 0;
 	all->com.exp_add = 0;
-	all->arg.str = ft_strdup("");
+	all->arg.str = NULL;
+	all->com.unset = 0;
+	all->com.env = 0;
 }
 
-int	start_work_command(char *str)
+int	start_work_command(char *str, char **env)
 {
 	int i = 0;
 	char **array;
