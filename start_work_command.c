@@ -74,5 +74,6 @@ int	start_work_command(char *str, char **env)
 	printf(">>>str = %s\n", all->arg.str);
 	printf(">>>unset = %d\n", all->com.unset);
 	printf(">>>env = %d\n", all->com.env);
+	parse_command(array, all, env);
 	return (1);
 }

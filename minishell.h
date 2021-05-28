@@ -11,12 +11,6 @@
 # include <string.h>
 # include "libft.h"
 
-int		start_minishell(struct termios term, char **env);
-void	print_d_array(char **hystory);
-int	start_work_command(char *str, char **env);
-int	ft_strcmp(char *s1, char *s2);
-int	count_str_in_array(char **hystory);
-
 typedef struct		s_arg
 {
 	char			*str;
@@ -48,5 +42,11 @@ typedef struct		s_hystory
 		int	count;
 }					t_hystory;
 
+int		start_minishell(struct termios term, char **env);
+void	print_d_array(char **hystory);
+int		start_work_command(char *str, char **env);
+int		ft_strcmp(char *s1, char *s2);
+int		count_str_in_array(char **hystory);
+void	parse_command(char **array, t_all *all, char **envp);
 
 #endif
