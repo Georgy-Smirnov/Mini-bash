@@ -180,8 +180,10 @@ int		read_before_end_of_string(char **rez, t_hystory *hystory, struct termios te
 int	do_in_main_cycle(char **rez, struct termios term, t_hystory *hystory, char **env)
 {
 	int buf;
+	t_list	*list;
 
 	buf = 1;
+	list = create_list(env);
 	while (buf != 0)
 	{
 		write (1, "\e[1;32mMinishell% \e[0m", 22);
@@ -196,7 +198,7 @@ int	do_in_main_cycle(char **rez, struct termios term, t_hystory *hystory, char *
 		hystory->array = add_in_array(hystory->array, *rez);
 		if (hystory->array == NULL)
 			return (0);
-		if (start_work_command(*rez, env) == 0)
+		if (start_parse_command(*rez, list) == 0)
 			return (0);
 	}
 	return (1);

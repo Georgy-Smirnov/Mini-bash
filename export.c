@@ -14,6 +14,7 @@ t_list	*create_list(char **envp)
 	int i;
 	t_list *list;
 
+	list = NULL;
 	i = 0;
 	while (envp[i] != NULL)
 	{
@@ -23,19 +24,63 @@ t_list	*create_list(char **envp)
 	return(list);
 }
 
-void	add_export(char *name_varible, char *value_varible, t_list *list)
+void	get_variable(t_all *all)
 {
-	char	*str_env;
+	int	i;
+	int j;
+	int	equally;
+
+	i = 0;
+	j = 0;
+	equally = 0;
+	while (all->arg.str[i] != '\0')
+	{
+		if (all->arg.str[i] == '=')
+			equally = 1;
+		if (!equally)
+			all->var.name_var[i] = all->arg.str[i];
+		else
+		{
+			all->var.value_var[j] = all->arg.str[i];
+			j++;
+		}
+		i++;
+	}
+}
+
+int check_content(char *content, t_all *all)
+{
+	int i;
+	int flag;
+
+	i = 0;
+	flag = 0;
+	while(all->var.name_var[i] != '\0')
+	{
+		printf("!!!content: %c\n", content[i]);
+		printf("???var: %c\n", all->var.name_var[i]);
+		if (content[i] == all->var.name_var[i])
+			return(1);
+		i++;
+	}
+	return(0);
+}
+
+void	add_export(t_list *list, t_all *all)
+{
 	int		flag;
 	t_list	*copy_list;
 
+	flag = 0;
 	copy_list = list;
-	str_env = ft_strjoin(name_varible, value_varible);
-	while (copy_list->next != NULL)
+	all->var.name_var = ft_strdup("");
+	all->var.value_var = ft_strdup("");
+	get_variable(all);
+	while (copy_list != NULL)
 	{
-		if (ft_strcmp(copy_list->content, name_varible) == 0)
+		if (check_content(copy_list->content, all))
 		{
-			copy_list->content = str_env;
+			copy_list->content = all->arg.str;
 			flag = 0;
 			break;
 		}
@@ -44,8 +89,7 @@ void	add_export(char *name_varible, char *value_varible, t_list *list)
 		copy_list = copy_list->next;
 	}
 	if (flag)
-		ft_lstadd_back(&list, ft_lstnew(str_env));
-	output_list(list);
+		ft_lstadd_back(&list, ft_lstnew(all->arg.str));
 }
 
 void	output_export(t_list *list)
@@ -122,35 +166,19 @@ void		unset(char *name_varible, t_all *all, t_list *list)
 	output_list(copy_list);
 }
 
-void		manage_export(char *name_varible, char *value_varible, char **envp, t_all *all)
-{
-	int		temp_flag;
-	t_list	*list;
-
-	list = create_list(envp);
-	temp_flag = 2;
-	if (temp_flag == 1)
-		add_export(name_varible, value_varible, list);
-	else if (temp_flag == 2)
-		sort_export(list);
-	// else if (temp_flag == 2)
-	// 	printf("!!!QQQ!!!\n");
-		// unset(name_varible, all, list);
-}
-
-void	parse_command(char **array, t_all *all, char **envp)
+void	parse_command(t_all *all, t_list *list)
 {
 	int i;
-	t_list	*list;
 
-    list = create_list(envp);
 	i = 0;
-	while (array[i])
+	while (all->arg.arguments[i])
 	{
 		if (all->com.exp)
 			sort_export(list);
 		else if (all->com.exp_add)
-			return ;
-		
+			add_export(list, all);
+		else if (all->com.env)
+			output_list(list);
+		i++;
 	}
 }

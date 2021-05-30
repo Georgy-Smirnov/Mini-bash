@@ -1,2 +1,2 @@
 #!/bin/bash
-gcc *.c Libft.a -ltermcap && ./a.out
+gcc -g *.c Libft.a -ltermcap && ./a.out

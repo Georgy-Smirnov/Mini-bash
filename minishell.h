@@ -11,9 +11,16 @@
 # include <string.h>
 # include "libft.h"
 
+typedef struct		s_variable
+{
+	char			*name_var;
+	char			*value_var;
+}					t_variable;
+
 typedef struct		s_arg
 {
 	char			*str;
+	char			**arguments;
 }					t_arg;
 
 typedef struct		s_command
@@ -34,6 +41,7 @@ typedef struct		s_all
 {
 	t_command		com;
 	t_arg			arg;
+	t_variable		var;
 }					t_all;
 
 typedef struct		s_hystory
@@ -43,10 +51,20 @@ typedef struct		s_hystory
 }					t_hystory;
 
 int		start_minishell(struct termios term, char **env);
+int		start_parse_command(char *str, t_list *list);
+int		start_work_command(t_all *all, t_list *list);
+
 void	print_d_array(char **hystory);
-int		start_work_command(char *str, char **env);
 int		ft_strcmp(char *s1, char *s2);
 int		count_str_in_array(char **hystory);
-void	parse_command(char **array, t_all *all, char **envp);
+char 	**add_in_array(char **hystory, char *str);
+
+char	*add_if_one_quote(char *one_arg, char *str, int *i);
+char	*add_if_two_quote(char *one_arg, char *str, int *i);
+char	*add_if_dollar(char *one_arg, char *str, int *i);
+char	*add_one_symbol_in_end(char *str, char c);
+
+void	parse_command(t_all *all, t_list *list);
+t_list	*create_list(char **envp);
 
 #endif
