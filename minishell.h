@@ -60,11 +60,13 @@ int		count_str_in_array(char **hystory);
 char 	**add_in_array(char **hystory, char *str);
 
 char	*add_if_one_quote(char *one_arg, char *str, int *i);
-char	*add_if_two_quote(char *one_arg, char *str, int *i);
-char	*add_if_dollar(char *one_arg, char *str, int *i);
+char	*add_if_two_quote(char *one_arg, char *str, int *i, t_list *list);
+char	*add_if_dollar(char *str, int *i, t_list *list);
 char	*add_one_symbol_in_end(char *str, char c);
 
 void	parse_command(t_all *all, t_list *list);
 t_list	*create_list(char **envp);
+char	*put_end_of_string();
+char	*add_one_symbol_in_end(char *str, char c);
 
 #endif

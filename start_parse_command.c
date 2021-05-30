@@ -31,15 +31,15 @@ void	bzero_t_all(t_all *all)
 	all->arg.arguments = NULL;
 }
 
-// void	check_build_in_command(t_all *all)
-// {
-// 	if (!ft_strncmp(str, "unset", 5))
-// 		all->com.unset = 1;
-// 	if (!ft_strncmp(str, "env", 3))
-// 		all->com.env = 1;
-// 	if (!ft_strncmp(str, "export", 6))
-// 		all->com.exp = 1;
-// }
+void	check_build_in_command(t_all *all)
+{
+	if (!ft_strncmp(all->arg.arguments[0], "unset", 5))
+		all->com.unset = 1;
+	if (!ft_strncmp(all->arg.arguments[0], "env", 3))
+		all->com.env = 1;
+	if (!ft_strncmp(all->arg.arguments[0], "export", 6))
+		all->com.exp = 1;
+}
 
 char *add_one_symbol_in_end(char *str, char c)
 {
@@ -50,7 +50,11 @@ char *add_one_symbol_in_end(char *str, char c)
 	i = 0;
 	if (str == NULL)
 	{
-		printf("ERROR: START_WORK_COMMAND str73");
+		rez = (char *)malloc(sizeof(char) * 2);
+		if (rez == NULL)
+			return (NULL);
+		rez[0] = c;
+		rez[1] = 0;
 	}
 	else
 	{
@@ -81,7 +85,7 @@ char	*put_end_of_string()
 	return (rez);
 }
 
-int	write_one_arg(char **one_arg, char *str, int *i)
+int	write_one_arg(char **one_arg, char *str, int *i, t_list *list)
 {
 	if (str[*i] == '\'')
 	{
@@ -91,7 +95,7 @@ int	write_one_arg(char **one_arg, char *str, int *i)
 	}
 	else if (str[*i] == '"')
 	{
-		*one_arg = add_if_two_quote(*one_arg, str, i);
+		*one_arg = add_if_two_quote(*one_arg, str, i, list);
 		if (*one_arg == NULL)
 			return (0);
 	}
@@ -104,7 +108,7 @@ int	write_one_arg(char **one_arg, char *str, int *i)
 	}
 	else if (str[*i] == '$')
 	{
-		*one_arg = add_if_dollar(*one_arg, str, i);
+		*one_arg = add_if_dollar(str, i, list);
 		if (*one_arg == NULL)
 			return (0);
 	}
@@ -138,7 +142,7 @@ int	start_parse_command(char *str, t_list *list)
 	{
 		while (str[i] != ' ' && str[i] != ';' && str[i] != 0 && str[i] != '|')
 		{
-			if (write_one_arg(&one_arg, str, &i) == 0)
+			if (write_one_arg(&one_arg, str, &i, list) == 0)
 				return (0);
 		}
 		if (*one_arg != 0)
