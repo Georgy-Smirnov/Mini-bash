@@ -14,11 +14,29 @@ int	ft_strcmp(char *s1, char *s2)
 	return(0);
 }
 
-char *skip_space(char *str)
+int	skip_space(char *str, int i)
 {
-	while (*str == ' ')
-		str++;
-	return (str);
+	while (str[i] == ' ')
+	{
+		i++;
+	}
+	return (i);
+}
+
+void	clean_arguments(t_all *all)
+{
+	int j;
+	
+	j = 0;
+	if (all->arg.arguments)
+	{
+		while (all->arg.arguments[j])
+		{
+			free(all->arg.arguments[j]);
+			all->arg.arguments[j] = NULL;
+			j++;
+		}
+	}
 }
 
 void	bzero_t_all(t_all *all)
@@ -134,7 +152,7 @@ int	start_parse_command(char *str, t_list *list)
 		return (0);
 	bzero_t_all(all);
 
-	str = skip_space(str);
+	i = skip_space(str, i);
 	while (str[i])
 	{
 		one_arg = put_end_of_string();
@@ -145,19 +163,27 @@ int	start_parse_command(char *str, t_list *list)
 			if (write_one_arg(&one_arg, str, &i, list) == 0)
 				return (0);
 		}
+		if (*one_arg != 0)
+		{
+			all->arg.arguments = add_in_array(all->arg.arguments, one_arg);
+			free(one_arg);
+			one_arg = NULL;
+		}
 		if (str[i] == ' ')
-			str = skip_space(str);
-		all->arg.arguments = add_in_array(all->arg.arguments, one_arg);
-		free(one_arg);
-		one_arg = NULL;
+		{
+			i = skip_space(str, i);
+			i--;
+		}
+		if (str[i] == '|')
+			all->arg.arguments = add_in_array(all->arg.arguments, "|");
 		if (str[i] == ';')
 		{
-			//ИЗМЕНИТЬ ARGUMENTS
 			// check_build_in_command(all);
 			if (start_work_command(all, list) == 0)
 				return (0);
+			clean_arguments(all);
 		}
-		if (str[i] == 0)
+		if (str[i] == 0 || (str[i] == ' ' && str[i + 1] == 0)) //костыль из-за ситуации пробелы в конце строки
 		{
 			if (start_work_command(all, list) == 0)
 				return (0);
@@ -165,17 +191,10 @@ int	start_parse_command(char *str, t_list *list)
 		}
 		i++;
 	}
-
-	i = 0;
-	if (all->arg.arguments)
-	{
-		while (all->arg.arguments[i])
-		{
-			free(all->arg.arguments[i]);
-			i++;
-		}
-		free(all->arg.arguments);
-	}
+	clean_arguments(all);
+	free(all->arg.arguments);
 	free(all);
 	return (1);
 }
+
+//   УТЕЧКИ ПРИ |:w

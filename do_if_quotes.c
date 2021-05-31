@@ -104,7 +104,7 @@ char *put_variable(char *str, int *i, t_list *list)
 	variable = put_end_of_string();
 	if (variable == NULL)
 		return (NULL);
-	while (str[*i] != 0 && str[*i] != ' ' && str[*i] != '"')
+	while (str[*i] != 0 && str[*i] != ' ' && str[*i] != '"' && str[*i] != ';'  && str[*i] != '$')
 	{
 		variable = add_one_symbol_in_end(variable, str[*i]);
 		if (variable == NULL)
