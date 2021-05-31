@@ -61,7 +61,7 @@ char 	**add_in_array(char **hystory, char *str);
 
 char	*add_if_one_quote(char *one_arg, char *str, int *i);
 char	*add_if_two_quote(char *one_arg, char *str, int *i, t_list *list);
-char	*add_if_dollar(char *str, int *i, t_list *list);
+int		add_if_dollar(char *str, int *i, t_list *list, char **one_arg);
 char	*add_one_symbol_in_end(char *str, char c);
 
 void	parse_command(t_all *all, t_list *list);

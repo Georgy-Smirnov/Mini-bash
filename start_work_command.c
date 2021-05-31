@@ -15,7 +15,7 @@ void	print_struct(t_all *all)
 
 int	start_work_command(t_all *all, t_list *list)
 {
-	parse_command(all, list);
+	// parse_command(all, list);
 	print_struct(all);
 	return (1);
 }

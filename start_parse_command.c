@@ -23,6 +23,7 @@ char *skip_space(char *str)
 
 void	bzero_t_all(t_all *all)
 {
+	int i = 0;
 	all->com.exp = 0;
 	all->com.exp_add = 0;
 	all->arg.str = NULL;
@@ -31,15 +32,15 @@ void	bzero_t_all(t_all *all)
 	all->arg.arguments = NULL;
 }
 
-void	check_build_in_command(t_all *all)
-{
-	if (!ft_strncmp(all->arg.arguments[0], "unset", 5))
-		all->com.unset = 1;
-	if (!ft_strncmp(all->arg.arguments[0], "env", 3))
-		all->com.env = 1;
-	if (!ft_strncmp(all->arg.arguments[0], "export", 6))
-		all->com.exp = 1;
-}
+// void	check_build_in_command(t_all *all)
+// {
+// 	if (!ft_strncmp(all->arg.arguments[0], "unset", 5))
+// 		all->com.unset = 1;
+// 	if (!ft_strncmp(all->arg.arguments[0], "env", 3))
+// 		all->com.env = 1;
+// 	if (!ft_strncmp(all->arg.arguments[0], "export", 6))
+// 		all->com.exp = 1;
+// }
 
 char *add_one_symbol_in_end(char *str, char c)
 {
@@ -108,8 +109,7 @@ int	write_one_arg(char **one_arg, char *str, int *i, t_list *list)
 	}
 	else if (str[*i] == '$')
 	{
-		*one_arg = add_if_dollar(str, i, list);
-		if (*one_arg == NULL)
+		if (add_if_dollar(str, i, list, one_arg) == 0)
 			return (0);
 	}
 	else
@@ -155,11 +155,23 @@ int	start_parse_command(char *str, t_list *list)
 		}
 		if (str[i] == ';' || str[i] == 0)
 		{
-			check_build_in_command(all);
+			// check_build_in_command(all);
 			if (start_work_command(all, list) == 0)
 				return (0);
+			if (str[i] == 0)
+				break;
 		}
 		i++;
+	}
+	i = 0;
+	if (all->arg.arguments)
+	{
+		while (all->arg.arguments[i])
+		{
+			free(all->arg.arguments[i]);
+			i++;
+		}
+		free(all->arg.arguments);
 	}
 	return (1);
 }

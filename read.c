@@ -215,7 +215,5 @@ int	start_minishell(struct termios term, char **env)
 	hystory.array = NULL;
 	if (do_in_main_cycle(&rez, term, &hystory, env) == 0)
 		return (0);
-	printf("HYSTORY:\n");
-	print_d_array(hystory.array);
 	return (1);
 }

@@ -16,22 +16,23 @@ char *add_if_one_quote(char *one_arg, char *str, int *i)
 	return (rez);
 }
 
-char *put_variable(char *str)
+char *search_variable(char *str)
 {
-	int j = 0;
+	char *variable;
+	int i;
 	
-	char *rez;
-	while (str[j] != '$')
-		j++;
-	j++;
-	while (str[j] != 0 && str[j] != ' ' && str[j] != '"')
+	i = 0;
+	variable = put_end_of_string();
+	while (str[i] != '$')
+		i++;
+	while (str[i] != 0 && str[i] != ' ' && str[i] != '"')
 	{
-		rez = add_one_symbol_in_end(rez, str[j]);
-		if (rez == NULL)
+		variable = add_one_symbol_in_end(variable, str[i]);
+		if (variable == NULL)
 			return (NULL);
-		j++;
+		i++;
 	}
-	return (rez);
+	return (variable);
 }
 
 char *add_if_two_quote(char *one_arg, char *str, int *i, t_list *list)
@@ -47,20 +48,23 @@ char *add_if_two_quote(char *one_arg, char *str, int *i, t_list *list)
 		if (str[*i] == '\\')
 		{
 			if (str[(*i) + 1] == '$' || str[(*i) + 1] == '\\' || str[(*i) + 1] == '"')
+			{
 				rez = add_one_symbol_in_end(rez, str[(*i) + 1]);
-				//CHECK NULL
-			(*i) += 2;
+				if (rez == NULL)
+					return (NULL);
+				(*i) += 2;
+			}
+			else
+			{
+				rez = add_one_symbol_in_end(rez, str[*i]);
+				(*i)++;
+			}
 		}
 		else if (str[*i] == '$')
 		{
-			printf("==%d==%c==\n", *i, str[*i]);
-			tmp = add_if_dollar(&str[(*i) - 1], i, list);
-			//check NUll
-			rez = ft_strjoin_with_frees1(rez, tmp);
-			//check NULL
-			printf("___%d___%s___\n", *i, tmp);
-			*i += ft_strlen(tmp);
-			free(tmp);
+			if (add_if_dollar(str, i, list, &rez) == 0)
+				return (NULL);
+			(*i)++;
 		}
 		else
 		{
@@ -73,14 +77,33 @@ char *add_if_two_quote(char *one_arg, char *str, int *i, t_list *list)
 	return (rez);
 }
 
-char *add_if_dollar(char *str, int *i, t_list *list)
+int	compare_variables(char *variable, char *str)
+{
+	int i;
+
+	i = 0;
+	while (variable[i])
+	{
+		if (variable[i] != str[i])
+			return (0);
+		i++;
+	}
+	if (str[i] != '=')
+		return (0);
+	return (1);
+}
+
+char *put_variable(char *str, int *i, t_list *list)
 {
 	char *variable;
-	char *rez = NULL;
+	char *rez;
+	char *max;
 
-	printf("==%d==%c==\n", *i, str[*i]);
 	(*i)++;
+	rez = NULL;
 	variable = put_end_of_string();
+	if (variable == NULL)
+		return (NULL);
 	while (str[*i] != 0 && str[*i] != ' ' && str[*i] != '"')
 	{
 		variable = add_one_symbol_in_end(variable, str[*i]);
@@ -88,14 +111,37 @@ char *add_if_dollar(char *str, int *i, t_list *list)
 			return (NULL);
 		(*i)++;
 	}
-	printf(">>>%s<<<", variable);
 	while (list->next)
 	{
-		if (ft_strncmp(list->content, variable, (size_t)ft_strlen(variable)) == 0)
-			rez = ft_strdup(list->content+=(ft_strlen(variable) + 1));
-			//check NULL
+		if (compare_variables(variable, list->content) == 1)
+		{
+			rez = ft_strdup(&list->content[ft_strlen(variable) + 1]);
+			if (rez == NULL)
+				return (NULL);
+			free(variable);
+		}
 		list = list->next;
+	}
+	if (rez == NULL)
+	{
+		rez = put_end_of_string();
+		if (rez == NULL)
+			return (NULL);
 	}
 	(*i)--;
 	return (rez);
+}
+
+int	add_if_dollar(char *str, int *i, t_list *list, char **one_arg)
+{
+	char *tmp;
+
+	tmp = put_variable(str, i, list);
+	if (tmp == NULL)
+		return (0);
+	*one_arg = ft_strjoin_with_frees1(*one_arg, tmp);
+	if (*one_arg == NULL)
+		return (0);
+	free(tmp);
+	return (1);
 }
