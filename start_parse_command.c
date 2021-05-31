@@ -132,37 +132,40 @@ int	start_parse_command(char *str, t_list *list)
 	all = (t_all *)malloc(sizeof(t_all));
 	if (all == NULL)
 		return (0);
-	one_arg = put_end_of_string();
-	if (one_arg == NULL)
-		return (0);
 	bzero_t_all(all);
 
 	str = skip_space(str);
 	while (str[i])
 	{
+		one_arg = put_end_of_string();
+		if (one_arg == NULL)
+			return (0);
 		while (str[i] != ' ' && str[i] != ';' && str[i] != 0 && str[i] != '|')
 		{
 			if (write_one_arg(&one_arg, str, &i, list) == 0)
 				return (0);
 		}
-		if (*one_arg != 0)
+		if (str[i] == ' ')
+			str = skip_space(str);
+		all->arg.arguments = add_in_array(all->arg.arguments, one_arg);
+		free(one_arg);
+		one_arg = NULL;
+		if (str[i] == ';')
 		{
-			all->arg.arguments = add_in_array(all->arg.arguments, one_arg);
-			free(one_arg);
-			one_arg = put_end_of_string();
-			if (one_arg == NULL)
-				return (0);
-		}
-		if (str[i] == ';' || str[i] == 0)
-		{
+			//ИЗМЕНИТЬ ARGUMENTS
 			// check_build_in_command(all);
 			if (start_work_command(all, list) == 0)
 				return (0);
-			if (str[i] == 0)
-				break;
+		}
+		if (str[i] == 0)
+		{
+			if (start_work_command(all, list) == 0)
+				return (0);
+			break;
 		}
 		i++;
 	}
+
 	i = 0;
 	if (all->arg.arguments)
 	{
@@ -173,5 +176,6 @@ int	start_parse_command(char *str, t_list *list)
 		}
 		free(all->arg.arguments);
 	}
+	free(all);
 	return (1);
 }
