@@ -11,7 +11,7 @@ int	skip_space(char *str, int i)
 
 int	skip_right_symbol(char *str, int i, int *tmp_i)
 {
-	while (str[i] != ';' && str[i] != '|' && str[i] != '<' && str[i] != '>')
+	while (str[i] != ';' && str[i] != '|' && str[i] != '<' && str[i] != '>' && str[i] != 0)
 	{
 		i++;
 		(*tmp_i)++;

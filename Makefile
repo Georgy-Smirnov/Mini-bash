@@ -1,4 +1,5 @@
-SRCS		=	main.c \
+#
+#SRCS		=	main.c \
 				srcs/read.c \
 				srcs/start_parse_command.c \
 				srcs/check_errors.c \
@@ -9,27 +10,27 @@ SRCS		=	main.c \
 				srcs/export.c \
 				srcs/unset.c
 
-NAME		=	minishell
+#NAME		=	minishell
 
-OBJS		=	${SRCS:%.c=%.o}
+#OBJS		=	${SRCS:%.c=%.o}
 
-all:			${NAME}
+#all:			${NAME}
 
-${NAME}:		${OBJS}
-				gcc -o ${NAME} ${OBJS} libft/Libft.a -ltermcap
+#${NAME}:		${OBJS}
+#				${MAKE} -C ./libft #
+#				gcc -o ${NAME} ${OBJS} libft/Libft.a -ltermcap
 
-%.o:			%.c
-				gcc -c $< -o $@
+#%.o:			%.c
+#				gcc -c $< -o $@
 
-clean:
-			rm -f ${OBJS}
+#clean:
+#			rm -f ${OBJS}
 
-fclean:		clean
-			rm -f ${NAME}
+#fclean:		clean
+#			rm -f ${NAME}
 
-re:			fclean all
+#re:			fclean all
 
-.PHONY: all clean fclean re
+#.PHONY: all clean fclean re
 
-#${MAKE} -C ./libft #
 
