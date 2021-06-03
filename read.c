@@ -23,7 +23,7 @@ void	print_d_array(char **hystory)
 
 	i = 0;
 	if (hystory == NULL)
-		ft_putstr_fd("null", 1);
+		ft_putstr_fd("!!!NULL!!!", 1);
 	else
 	{
 		while (hystory[i] != NULL)

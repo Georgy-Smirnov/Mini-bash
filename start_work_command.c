@@ -3,15 +3,46 @@
 
 void	print_struct(t_all *all)
 {
-	printf(">>>exp = %d\n", all->com.exp);
-	printf(">>>exp_add = %d\n", all->com.exp_add);
-	printf(">>>str = %s\n", all->arg.str);
-	printf(">>>unset = %d\n", all->com.unset);
-	printf(">>>env = %d\n", all->com.env);
-	printf("************\n");
-	print_d_array(all->arg.arguments);
+	int i = 0;
+
+	printf("*******************************\n");
+	printf("count: %d\n", all->count);
+	printf("*******************************\n\n\n");
+	while (i <= all->count)
+	{
+		printf("*******************************\n");
+		printf("***********struct %d************\n", i);
+		printf("*******************************\n");
+		printf("exp: %d\n", all->com[i].exp);
+		printf("exp_add: %d\n", all->com[i].exp_add);
+		printf("unset: %d\n", all->com[i].unset);
+		printf("env: %d\n", all->com[i].env);
+		printf("echo: %d\n", all->com[i].echo);
+		printf("n: %d\n", all->com[i].n);
+		printf("cd: %d\n", all->com[i].cd);
+		printf("pwd: %d\n", all->com[i].pwd);
+		printf("exit: %d\n", all->com[i].exit);
+		printf("another: %d\n", all->com[i].another);
+		printf("*******************************\n");
+		printf("pipe: %d\n", all->flags[i].pipe);
+		printf("less_than: %d\n", all->flags[i].less_than);
+		printf("greater_than: %d\n", all->flags[i].greater_than);
+		printf("d_greater_than: %d\n", all->flags[i].d_greater_than);
+		printf("*******************************\n");
+		print_d_array(all->arg[i].arguments);
+		i++;
+	}
 }
 
+// void	check_build_in_command(t_all *all)
+// {
+// 	if (!ft_strncmp(all->arg.arguments[0], "unset", 5))
+// 		all->com.unset = 1;
+// 	if (!ft_strncmp(all->arg.arguments[0], "env", 3))
+// 		all->com.env = 1;
+// 	if (!ft_strncmp(all->arg.arguments[0], "export", 6))
+// 		all->com.exp = 1;
+// }
 
 int	start_work_command(t_all *all, t_list *list)
 {

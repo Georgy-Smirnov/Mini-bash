@@ -19,9 +19,16 @@ typedef struct		s_variable
 
 typedef struct		s_arg
 {
-	char			*str;
 	char			**arguments;
 }					t_arg;
+
+typedef struct		s_flags
+{
+	short int		pipe;
+	short int		less_than;
+	short int		greater_than;
+	short int		d_greater_than;
+}					t_flags;
 
 typedef struct		s_command
 {
@@ -39,8 +46,10 @@ typedef struct		s_command
 
 typedef struct		s_all
 {
-	t_command		com;
-	t_arg			arg;
+	int				count;
+	t_command		*com;
+	t_arg			*arg;
+	t_flags			*flags;
 	t_variable		var;
 }					t_all;
 
@@ -68,5 +77,11 @@ void	parse_command(t_all *all, t_list *list);
 t_list	*create_list(char **envp);
 char	*put_end_of_string();
 char	*add_one_symbol_in_end(char *str, char c);
+
+t_all	*create_struct(void);
+int		add_in_struct(t_all *all);
+void	clean_struct(t_all *all);
+
+void	print_struct(t_all *all);
 
 #endif
