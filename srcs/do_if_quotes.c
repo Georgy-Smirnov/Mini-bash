@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 char *add_if_one_quote(char *one_arg, char *str, int *i)
 {

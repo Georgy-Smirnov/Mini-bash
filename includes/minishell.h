@@ -12,7 +12,8 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-# include "libft.h"
+
+# include "../libft/libft.h"
 
 typedef struct		s_variable
 {

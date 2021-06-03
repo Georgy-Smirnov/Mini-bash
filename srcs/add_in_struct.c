@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 t_command	*b_zero(t_command *tmp, int i)
 {
