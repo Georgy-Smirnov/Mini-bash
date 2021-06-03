@@ -49,7 +49,7 @@ int	check_errors(char *str)
 		}
 		i++;
 	}
-	if (str[i - 1] != '\\')
+	if (str[i - 1] == '\\')
 	{
 		ft_putstr_fd("Syntax error!\n", 1);
 		return (0);	
