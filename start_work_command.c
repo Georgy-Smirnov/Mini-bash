@@ -34,16 +34,6 @@ void	print_struct(t_all *all)
 	}
 }
 
-// void	check_build_in_command(t_all *all)
-// {
-// 	if (!ft_strncmp(all->arg.arguments[0], "unset", 5))
-// 		all->com.unset = 1;
-// 	if (!ft_strncmp(all->arg.arguments[0], "env", 3))
-// 		all->com.env = 1;
-// 	if (!ft_strncmp(all->arg.arguments[0], "export", 6))
-// 		all->com.exp = 1;
-// }
-
 int	start_work_command(t_all *all, t_list *list)
 {
 	// parse_command(all, list);

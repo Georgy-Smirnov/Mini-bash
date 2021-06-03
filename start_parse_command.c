@@ -14,15 +14,6 @@ int	ft_strcmp(char *s1, char *s2)
 	return(0);
 }
 
-int	skip_space(char *str, int i)
-{
-	while (str[i] == ' ')
-	{
-		i++;
-	}
-	return (i);
-}
-
 char *add_one_symbol_in_end(char *str, char c)
 {
 	int i;
@@ -104,6 +95,30 @@ int	write_one_arg(char **one_arg, char *str, int *i, t_list *list)
 	return (1);
 }
 
+void	check_build_in_command(t_all *all)
+{
+	if (!ft_strncmp(all->arg[all->count].arguments[0], "export", 6) && all->arg[all->count].arguments[1] == NULL)
+		all->com[all->count].exp = 1;
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "export", 6))
+		all->com[all->count].exp_add = 1;
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "unset", 5))
+		all->com[all->count].unset = 1;
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "env", 3))
+		all->com[all->count].env = 1;
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "cd", 2))
+		all->com[all->count].cd = 2;
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "pwd", 3))
+		all->com[all->count].pwd = 1;
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "exit", 4))
+		all->com[all->count].exit = 1;
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "echo", 4))
+	{
+		all->com[all->count].echo = 1;
+		if (!ft_strncmp(all->arg[all->count].arguments[2], "-n", 2))
+			all->com[all->count].n = 1;
+	}
+}
+
 int	check_flags(t_all *all, char *str, int *i)
 {
 	if (str[*i] == '|')
@@ -148,6 +163,7 @@ int	put_arguments(t_all *all, t_list *list, char *str, int *i)
 	}
 	if (*one_arg != 0)
 		all->arg[all->count].arguments = add_in_array(all->arg[all->count].arguments, one_arg);
+	// check_build_in_command(all);
 	if (check_flags(all, str, i) == 0)
 		return (0);
 	free(one_arg);
@@ -161,7 +177,8 @@ int	start_parse_command(char *str, t_list *list)
 	char *one_arg;
 	t_all *all;
 
-	//check error;
+	if (check_errors(str) == 0)
+		return (0);
 	all = create_struct();
 	while (str[i])
 	{

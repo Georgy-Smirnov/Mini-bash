@@ -9,6 +9,9 @@
 # include <termcap.h>
 # include <curses.h>
 # include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 # include "libft.h"
 
 typedef struct		s_variable
@@ -83,5 +86,7 @@ int		add_in_struct(t_all *all);
 void	clean_struct(t_all *all);
 
 void	print_struct(t_all *all);
+int	skip_space(char *str, int i);
+int	check_errors(char *str);
 
 #endif
