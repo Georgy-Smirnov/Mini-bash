@@ -90,4 +90,7 @@ void	print_struct(t_all *all);
 int	skip_space(char *str, int i);
 int	check_errors(char *str);
 
+
+void	check_build_in_command(t_all *all);
+
 #endif

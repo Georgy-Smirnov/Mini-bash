@@ -14,6 +14,25 @@ int	ft_strcmp(char *s1, char *s2)
 	return(0);
 }
 
+int our_func(char *str)
+{
+	if (ft_strcmp(str, "export") == 0)
+		return (1);
+	if (ft_strcmp(str, "unset") == 0)
+		return (1);
+	if (ft_strcmp(str, "env") == 0)
+		return (1);
+	if (ft_strcmp(str, "cd") == 0)
+		return (1);
+	if (ft_strcmp(str, "pwd") == 0)
+		return (1);
+	if (ft_strcmp(str, "exit") == 0)
+		return (1);
+	if (ft_strcmp(str, "echo") == 0)
+		return (1);
+	return (0);
+}
+
 char *add_one_symbol_in_end(char *str, char c)
 {
 	int i;
@@ -120,13 +139,57 @@ int	check_flags(t_all *all, char *str, int *i)
 		all->flags[all->count].d_greater_than = 1;
 		if (add_in_struct(all) == 0)
 			return (0);
+		(*i)++;
 	}
 	return (1);
+}
+
+char *surch_path(t_list *list, char *str)
+{
+	int i = 0;
+	char *rez = NULL;
+	char **path;
+	struct stat statbuf;
+	int q;
+
+	while (list->next)
+	{
+		if (strncmp(list->content, "PATH=", 5) == 0)
+		{
+			rez = strdup(&list	->content[5]);
+			if (rez == NULL)
+				return (NULL);
+		}
+		list = list->next;
+	}
+	path = ft_split(rez, ':');
+	if (path == NULL)
+		return (NULL);
+	free(rez);
+	rez = NULL;
+	while (path[i])
+	{
+		path[i] = add_one_symbol_in_end(path[i], '/');
+		path[i] = ft_strjoin_with_frees1(path[i], str);
+		if (path[i] == NULL)
+			return (NULL);
+		if (stat(path[i], &statbuf) == 0)
+		{
+			rez = ft_strdup(path[i]);
+			if (rez == NULL)
+				return (NULL);
+		}
+		free(path[i]);
+		i++;
+	}
+	free(path);
+	return (rez);
 }
 
 int	put_arguments(t_all *all, t_list *list, char *str, int *i)
 {
 	char *one_arg;
+	char *tmp;
 
 	*i = skip_space(str, *i);
 	one_arg = put_end_of_string();
@@ -137,8 +200,16 @@ int	put_arguments(t_all *all, t_list *list, char *str, int *i)
 		if (write_one_arg(&one_arg, str, i, list) == 0)
 			return (0);
 	}
+	tmp = surch_path(list, one_arg);
+	if (tmp != NULL && all->arg[all->count].arguments == NULL && !our_func(one_arg))
+	{
+		free(one_arg);
+		one_arg = tmp;
+		all->com[all->count].another = 1;
+	}
 	if (*one_arg != 0)
 		all->arg[all->count].arguments = add_in_array(all->arg[all->count].arguments, one_arg);
+	check_build_in_command(all);
 	if (check_flags(all, str, i) == 0)
 		return (0);
 	free(one_arg);
