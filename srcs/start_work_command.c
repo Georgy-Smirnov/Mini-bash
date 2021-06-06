@@ -63,32 +63,32 @@ void	check_build_in_command(t_all *all)
 
 int	start_work_command(t_all *all, t_list *list)
 {
-	// pid_t pid;
-	// int status;
-	// int rez;
+	pid_t pid;
+	int status;
+	int rez;
 
-	// pid = fork();
-	// if (pid == -1)
-	// {
-	// 	perror("fork"); /* произошла ошибка */
-	// 	exit(1); /*выход из родительского процесса*/
-	// }
-	// else if (pid == 0)
-	// {
-	// 	execve(all->arg[0].arguments[0], all->arg[0].arguments, NULL);    
-	// }
-	// else
-	// {
-    //     if (wait(0) == -1)
-	// 	{
-	// 		perror("wait() error");
-	// 	}
-	// 	else if (WIFEXITED(status))
-	// 		rez = WEXITSTATUS(status);
-	// 	else
-	// 		printf("BAD");
-	// }
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork"); /* произошла ошибка */
+		exit(1); /*выход из родительского процесса*/
+	}
+	else if (pid == 0)
+	{
+		execve(all->arg[0].arguments[0], all->arg[0].arguments, NULL);    
+	}
+	else
+	{
+        if (wait(0) == -1)
+		{
+			perror("wait() error");
+		}
+		else if (WIFEXITED(status))
+			rez = WEXITSTATUS(status);
+		else
+			printf("BAD");
+	}
 	// parse_command(all, list);
-	print_struct(all);
+	// print_struct(all);
 	return (1);
 }

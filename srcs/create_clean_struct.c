@@ -45,13 +45,16 @@ void	clean_d_array(char **array)
 	int	i;
 
 	i = 0;
-	while (array[i])
+	if (array != NULL)
 	{
+		while (array[i])
+		{
+			free(array[i]);
+			i++;
+		}
 		free(array[i]);
-		i++;
+		free(array);
 	}
-	free(array[i]);
-	free(array);
 }
 
 void	clean_struct(t_all *all)

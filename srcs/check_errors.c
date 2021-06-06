@@ -9,50 +9,44 @@ int	skip_space(char *str, int i)
 	return (i);
 }
 
-int	skip_right_symbol(char *str, int i, int *tmp_i)
+int	print_error(void)
 {
-	while (str[i] != ';' && str[i] != '|' && str[i] != '<' && str[i] != '>' && str[i] != 0)
-	{
-		i++;
-		(*tmp_i)++;
-	}
-	if (str[i] == '>' && str[i + 1] == '>' &&
-	str[i - 1] != '>'  && str[i + 2] != '>')
-	{
-		*tmp_i = 1;
-		i++;
-	}
-	return (i);
+	write(1, "Syntax error!\n", 14);
+	return (0);
 }
 
 int	check_errors(char *str)
 {
 	int i;
-	int tmp_i;
+	int j;
+	char last_char;
 
 	i = 0;
+	j = 0;
 	i = skip_space(str, i);
 	if (str[i] == ';' || str[i] == '|' || str[i] == '<' || str[i] == '>')
-	{
-		ft_putstr_fd("Syntax error!\n", 1);
-		return (0);
-	}
+		return (print_error());
 	while (str[i])
 	{
-		tmp_i = 0;
-		i = skip_space(str, i);
-		i = skip_right_symbol(str, i, &tmp_i);
-		if (tmp_i == 0)
+		if (str[i] != ';' && str[i] != '|' && str[i] != '<' && str[i] != '>' && str[i] != ' ')
+			j++;
+		if (str[i] == ';' || str[i] == '|' || str[i] == '<' || str[i] == '>')
 		{
-			ft_putstr_fd("Syntax error!\n", 1);
-			return (0);	
+			if (j == 0)
+			{
+				if (str[i] == '>' && str[i - 1] == '>' && str[i + 1] != '>')
+					i++;
+				else
+					return (print_error());
+			}
+			last_char = str[i];
+			j = 0;
 		}
 		i++;
 	}
+	if (j == 0 && last_char != ';')
+		return (print_error());
 	if (str[i - 1] == '\\')
-	{
-		ft_putstr_fd("Syntax error!\n", 1);
-		return (0);	
-	}
+		return (print_error());
 	return (1);
 }
