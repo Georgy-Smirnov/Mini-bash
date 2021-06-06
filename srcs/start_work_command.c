@@ -88,7 +88,7 @@ int	start_work_command(t_all *all, t_list *list)
 		else
 			printf("BAD");
 	}
-	// parse_command(all, list);
+	parse_command(all, list);
 	// print_struct(all);
 	return (1);
 }

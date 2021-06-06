@@ -50,6 +50,7 @@ typedef struct		s_command
 
 typedef struct		s_all
 {
+	int				i;
 	int				count;
 	t_command		*com;
 	t_arg			*arg;
@@ -79,6 +80,7 @@ char	*add_one_symbol_in_end(char *str, char c);
 
 void	parse_command(t_all *all, t_list *list);
 t_list	*create_list(char **envp);
+void	output_list(t_list *list);
 char	*put_end_of_string();
 char	*add_one_symbol_in_end(char *str, char c);
 
