@@ -2,6 +2,7 @@
 
 void	output_list(t_list *list)
 {
+	
 	while (list->next != NULL)
 	{
 		list = list->next;
@@ -35,6 +36,8 @@ void	get_variable(t_all *all)
 	j = 0;
 	k = 0;
 	equally = 0;
+	all->var.name_var = ft_strdup("");
+	all->var.value_var = ft_strdup("");
 	while (all->arg->arguments[all->i + 1][j] != '\0')
 	{
 		if (all->arg->arguments[all->i + 1][j] == '=')
@@ -49,6 +52,8 @@ void	get_variable(t_all *all)
 		i++;
 		j++;
 	}
+	// printf("var.name_var: %s\n", all->var.name_var);
+	// printf("var.value_var: %s\n", all->var.value_var);
 }
 
 int check_content(char *content, t_all *all)
@@ -58,6 +63,8 @@ int check_content(char *content, t_all *all)
 
 	i = 0;
 	flag = 0;
+	// printf("content: %s\n", content);
+	// printf("var.name_var: %s\n", all->var.name_var);
 	while(all->var.name_var[i] != '\0')
 	{
 		if (content[i] == all->var.name_var[i])
@@ -65,34 +72,42 @@ int check_content(char *content, t_all *all)
 		i++;
 	}
 	return(0);
-	// return(1);
 }
 
 void	add_export(t_list *list, t_all *all)
 {
 	int		flag;
-	t_list	*copy_list;
+	t_list	*copy;
+	// t_list	*tmp;
 
 	flag = 0;
-	copy_list = list;
-	all->var.name_var = ft_strdup("");
-	all->var.value_var = ft_strdup("");
+	copy = list;
 	get_variable(all);
-	while (copy_list != NULL)
+	while (copy != NULL)
 	{
-		if (check_content(copy_list->content, all))
+		// printf("1\n");
+		// printf("content: %s\n", list->content);
+		if (check_content(copy->content, all))
 		{
-			copy_list->content = all->arg->arguments[all->i + 1];
+			printf("arguments1: %s\n", all->arg->arguments[all->i + 1]);
+			copy->content = ft_strdup(all->arg->arguments[all->i + 1]);
+			list = copy;
 			flag = 0;
 			break;
 		}
 		else
 			flag = 1;
-		copy_list = copy_list->next;
+		copy = copy->next;
 	}
+	printf("flag: %d\n", flag);
 	if (flag)
-		ft_lstadd_back(&list, ft_lstnew(all->arg->arguments[all->i + 1]));
-	// output_list(list);
+	{
+		printf("arguments: %s\n", all->arg->arguments[all->i + 1]);
+		ft_lstadd_back(&list, ft_lstnew(ft_strdup(all->arg->arguments[all->i + 1])));
+		// tmp = ft_lstnew(all->arg->arguments[all->i + 1]);
+		// printf("content: %s\n", tmp->content);
+		// printf("arguments: %s\n", all->arg->arguments[all->i + 1]);
+	}
 }
 
 void	output_export(t_list *list)
@@ -151,38 +166,62 @@ void	sort_export(t_list *list)
 	output_export(list);
 }
 
-// void		unset(char *name_varible, t_all *all, t_list *list)
-// {
-// 	char	*str_env;
-// 	t_list	*copy_list;
+void		unset(t_list *list, t_all *all)
+{
+	t_list	*copy;
+	// t_list	*after;
 
-// 	copy_list = list;
-// 	while (copy_list->next != NULL)
-// 	{
-// 		if (ft_strcmp(copy_list->content, name_varible) == 0)
-// 		{
-// 			free(copy_list->content);
-// 			break;
-// 		}
-// 		copy_list = copy_list->next;
-// 	}
-// 	output_list(copy_list);
-// }
+	copy = list;
+	while (copy != NULL)
+	{
+		// printf("content: %s\n", copy->content);
+		// printf("arguments1: %s\n", all->arg->arguments[all->i + 1]);
+		// printf("ft_strncmp: %d", ft_strncmp(copy->content, all->arg->arguments[all->i + 1], ft_strlen(all->arg->arguments[all->i + 1])) == 0);
+		
+		// after = copy->next;
+		if (ft_strncmp(copy->content, all->arg->arguments[all->i + 1], \
+			ft_strlen(all->arg->arguments[all->i + 1])) == 0)
+		{
+
+			printf("content: %s\n", copy->content);
+			copy = copy->next; 
+			free(copy->next);
+			copy->content = NULL;
+			free(list->content);
+			
+			// list = copy;
+			// free(copy);
+			// free(copy);
+			break;
+		}
+		copy = copy->next;
+	}
+	// free(copy);
+	// output_list(copy);
+}
 
 void	parse_command(t_all *all, t_list *list)
 {
 	int i;
 
 	all->i = 0;
+	// printf("unset: %d", all->com[all->i].unset);
 	while (all->i <= all->count)
 	{
-		// printf("!!!QQQ!!!\n");
 		if (all->com[all->i].exp)
 			sort_export(list);
 		else if (all->com[all->i].exp_add)
 			add_export(list, all);
 		else if (all->com[all->i].env)
 			output_list(list);
+		else if (all->com[all->i].unset)
+			unset(list, all);
+		else if (all->com[all->i].pwd)
+			get_pwd(all);
+		else if (all->com[all->i].cd)
+			chdir(all->arg->arguments[all->i + 1]);
+		else if (all->com[all->i].exit)
+			get_exit(all);
 		all->i++;
 	}
 }

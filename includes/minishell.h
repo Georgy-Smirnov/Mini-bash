@@ -81,6 +81,8 @@ char	*add_one_symbol_in_end(char *str, char c);
 void	parse_command(t_all *all, t_list *list);
 t_list	*create_list(char **envp);
 void	output_list(t_list *list);
+void	get_pwd(t_all *all);
+void    get_exit(t_all *all);
 char	*put_end_of_string();
 char	*add_one_symbol_in_end(char *str, char c);
 
