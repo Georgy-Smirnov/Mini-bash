@@ -5,11 +5,11 @@
 
 void	output_list(t_list *list)
 {
-	
 	while (list->next != NULL)
 	{
 		list = list->next;
-		printf("%s\n", list->content);
+		if (ft_strchr(list->content, '='))
+			printf("%s\n", list->content);
 	}
 }
 
@@ -96,19 +96,28 @@ void	output_export(t_list *list)
 	i = 0;
 	while (copy != NULL)
 	{
-		str = (char *)(copy->content);
-		ft_putstr_fd("declare -x ", 1);
-		while (str[i] != '=' && str[i])
-			write(1, &str[i++], 1);
-		if (str[i] == '=')
-			write(1, &str[i++], 1);
-		write(1, "\"", 1);
-		while (str[i])
-			write(1, &str[i++], 1);
-		write(1, "\"", 1);
-		write(1, "\n", 1);
+		if (ft_strchr(copy->content, '='))
+		{
+			str = (char *)(copy->content);
+			ft_putstr_fd("declare -x ", 1);
+			while (str[i] != '=' && str[i])
+				write(1, &str[i++], 1);
+			if (str[i] == '=')
+				write(1, &str[i++], 1);
+			write(1, "\"", 1);
+			while (str[i])
+				write(1, &str[i++], 1);
+			write(1, "\"", 1);
+			write(1, "\n", 1);
+			i = 0;
+		}
+		else
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(copy->content, 1);
+			write(1, "\n", 1);
+		}
 		copy = copy->next;
-		i = 0;
 	}
 }
 
@@ -168,6 +177,8 @@ int				exist_value_env(t_list *list, char *value)
 	return (0);
 }
 
+
+//обработать удаление без =
 void			unset(t_list *list, t_all *all)
 {
 	t_list *copy;
