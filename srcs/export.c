@@ -1,5 +1,8 @@
 #include "../includes/minishell.h"
 
+#define EXIST_VALUE 1
+#define NOT_EXIST_VALUE 0
+
 void	output_list(t_list *list)
 {
 	
@@ -38,75 +41,48 @@ void	get_variable(t_all *all)
 	equally = 0;
 	all->var.name_var = ft_strdup("");
 	all->var.value_var = ft_strdup("");
-	while (all->arg->arguments[all->i + 1][j] != '\0')
+	while (all->arg->arguments[all->i][j] != '\0')
 	{
-		if (all->arg->arguments[all->i + 1][j] == '=')
+		if (all->arg->arguments[all->i][j] == '=')
 			equally = 1;
 		if (!equally)
-			all->var.name_var[i] = all->arg->arguments[all->i + 1][j];
+			all->var.name_var[i] = all->arg->arguments[all->i][j];
 		else
 		{
-			all->var.value_var[k] = all->arg->arguments[all->i + 1][j];
+			all->var.value_var[k] = all->arg->arguments[all->i][j];
 			k++;
 		}
 		i++;
 		j++;
 	}
-	// printf("var.name_var: %s\n", all->var.name_var);
-	// printf("var.value_var: %s\n", all->var.value_var);
-}
-
-int check_content(char *content, t_all *all)
-{
-	int i;
-	int flag;
-
-	i = 0;
-	flag = 0;
-	// printf("content: %s\n", content);
-	// printf("var.name_var: %s\n", all->var.name_var);
-	while(all->var.name_var[i] != '\0')
-	{
-		if (content[i] == all->var.name_var[i])
-			return(1);
-		i++;
-	}
-	return(0);
 }
 
 void	add_export(t_list *list, t_all *all)
 {
 	int		flag;
 	t_list	*copy;
-	// t_list	*tmp;
 
-	flag = 0;
-	copy = list;
-	get_variable(all);
-	while (copy != NULL)
+	flag = 1;
+	while (all->arg->arguments[all->i] != NULL)
 	{
-		// printf("1\n");
-		// printf("content: %s\n", list->content);
-		if (check_content(copy->content, all))
+		get_variable(all);
+		copy = list;
+		while (copy != NULL)
 		{
-			printf("arguments1: %s\n", all->arg->arguments[all->i + 1]);
-			copy->content = ft_strdup(all->arg->arguments[all->i + 1]);
-			list = copy;
-			flag = 0;
-			break;
+			if (!(ft_strncmp(copy->content, all->var.name_var, ft_strlen(all->var.name_var))))
+			{
+				copy->content = ft_strdup(all->arg->arguments[all->i]);
+				list = copy;
+				flag = 0;
+				break;
+			}
+			copy = copy->next;
 		}
-		else
-			flag = 1;
-		copy = copy->next;
-	}
-	printf("flag: %d\n", flag);
-	if (flag)
-	{
-		printf("arguments: %s\n", all->arg->arguments[all->i + 1]);
-		ft_lstadd_back(&list, ft_lstnew(ft_strdup(all->arg->arguments[all->i + 1])));
-		// tmp = ft_lstnew(all->arg->arguments[all->i + 1]);
-		// printf("content: %s\n", tmp->content);
-		// printf("arguments: %s\n", all->arg->arguments[all->i + 1]);
+		if (flag)
+			ft_lstadd_back(&list, ft_lstnew(ft_strdup(all->arg->arguments[all->i])));
+		all->i++;
+		free(all->var.name_var);
+		free(all->var.value_var);
 	}
 }
 
@@ -166,62 +142,100 @@ void	sort_export(t_list *list)
 	output_export(list);
 }
 
-void		unset(t_list *list, t_all *all)
+int				exist_value_env(t_list *list, char *value)
 {
-	t_list	*copy;
-	// t_list	*after;
+	t_list *copy;
+	int i;
+	char *str;
 
 	copy = list;
-	while (copy != NULL)
+	i = 0;
+	while (copy->next != NULL)
 	{
-		// printf("content: %s\n", copy->content);
-		// printf("arguments1: %s\n", all->arg->arguments[all->i + 1]);
-		// printf("ft_strncmp: %d", ft_strncmp(copy->content, all->arg->arguments[all->i + 1], ft_strlen(all->arg->arguments[all->i + 1])) == 0);
-		
-		// after = copy->next;
-		if (ft_strncmp(copy->content, all->arg->arguments[all->i + 1], \
-			ft_strlen(all->arg->arguments[all->i + 1])) == 0)
-		{
-
-			printf("content: %s\n", copy->content);
-			copy = copy->next; 
-			free(copy->next);
-			copy->content = NULL;
-			free(list->content);
-			
-			// list = copy;
-			// free(copy);
-			// free(copy);
-			break;
-		}
 		copy = copy->next;
+		str = (char *)copy->content;
+		while (str[i] != '=' && str[i] && value[i])
+		{
+			if (str[i] == value[i])
+				i++;
+			else
+				break ;
+		}
+		if (ft_strlen(value) == i)
+			return (1);
+		i = 0;
 	}
-	// free(copy);
-	// output_list(copy);
+	return (0);
+}
+
+void			unset(t_list *list, t_all *all)
+{
+	t_list *copy;
+	t_list *before;
+	t_list *after;
+	int i;
+	int j;
+	int k;
+	char *str;
+	char *var;
+	int boolean;
+
+	copy = list;
+	i = 0;
+	j = 0;
+	k = 0;
+	get_variable(all);
+	var = ft_strjoin(all->var.name_var, all->var.value_var);
+	boolean = exist_value_env(list, var);
+	if (boolean)
+	{
+		while (copy->next != NULL)
+		{
+			copy = copy->next;
+			str = copy->content;
+			while (str[i] == var[i] && str[i] != '\0' && var[i] != '\0')
+				i++;
+			if (ft_strlen(var) == i && str[i] == '=')
+				break ;
+			i = 0;
+			j++;
+		}
+		after = copy->next;
+		before = list->next;
+		while (k != (j - 1))
+		{
+			before = before->next;
+			k++;
+		}
+		free(copy);
+		free(var);
+		if (before->next != NULL)
+			before->next = after;
+	}
 }
 
 void	parse_command(t_all *all, t_list *list)
 {
 	int i;
 
-	all->i = 0;
-	// printf("unset: %d", all->com[all->i].unset);
-	while (all->i <= all->count)
+	i = 0;
+	all->i = 1;
+	while (i <= all->count)
 	{
-		if (all->com[all->i].exp)
+		if (all->com[i].exp)
 			sort_export(list);
-		else if (all->com[all->i].exp_add)
+		else if (all->com[i].exp_add)
 			add_export(list, all);
-		else if (all->com[all->i].env)
+		else if (all->com[i].env)
 			output_list(list);
-		else if (all->com[all->i].unset)
+		else if (all->com[i].unset)
 			unset(list, all);
-		else if (all->com[all->i].pwd)
+		else if (all->com[i].pwd)
 			get_pwd(all);
-		else if (all->com[all->i].cd)
-			chdir(all->arg->arguments[all->i + 1]);
-		else if (all->com[all->i].exit)
+		else if (all->com[i].cd)
+			chdir(all->arg->arguments[i + 1]);
+		else if (all->com[i].exit)
 			get_exit(all);
-		all->i++;
+		i++;
 	}
 }
