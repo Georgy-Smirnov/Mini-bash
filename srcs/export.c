@@ -1,8 +1,5 @@
 #include "../includes/minishell.h"
 
-#define EXIST_VALUE 1
-#define NOT_EXIST_VALUE 0
-
 void	output_list(t_list *list)
 {
 	while (list->next != NULL)
@@ -178,7 +175,6 @@ int				exist_value_env(t_list *list, char *value)
 }
 
 
-//обработать удаление без =
 void			unset(t_list *list, t_all *all)
 {
 	t_list *copy;
@@ -206,7 +202,7 @@ void			unset(t_list *list, t_all *all)
 			str = copy->content;
 			while (str[i] == var[i] && str[i] != '\0' && var[i] != '\0')
 				i++;
-			if (ft_strlen(var) == i && str[i] == '=')
+			if (ft_strlen(var) == i && (str[i] == '=' || ft_strchr(var, '=') == 0))
 				break ;
 			i = 0;
 			j++;
@@ -222,6 +218,35 @@ void			unset(t_list *list, t_all *all)
 		free(var);
 		if (before->next != NULL)
 			before->next = after;
+	}
+}
+
+void	another_com(t_all *all)
+{
+	pid_t pid;
+	int status;
+	int rez;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork"); /* произошла ошибка */
+		exit(1); /*выход из родительского процесса*/
+	}
+	else if (pid == 0)
+	{
+		execve(all->arg[0].arguments[0], all->arg[0].arguments, NULL);    
+	}
+	else
+	{
+        if (wait(0) == -1)
+		{
+			perror("wait() error");
+		}
+		else if (WIFEXITED(status))
+			rez = WEXITSTATUS(status);
+		else
+			printf("BAD");
 	}
 }
 
@@ -247,6 +272,8 @@ void	parse_command(t_all *all, t_list *list)
 			chdir(all->arg->arguments[i + 1]);
 		else if (all->com[i].exit)
 			get_exit(all);
+		else if (all->com[i].another)
+			another_com(all);
 		i++;
 	}
 }

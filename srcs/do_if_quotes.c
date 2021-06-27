@@ -111,7 +111,7 @@ char *put_variable(char *str, int *i, t_list *list)
 			return (NULL);
 		(*i)++;
 	}
-	while (list->next)
+	while (list != NULL)
 	{
 		if (compare_variables(variable, list->content) == 1)
 		{
