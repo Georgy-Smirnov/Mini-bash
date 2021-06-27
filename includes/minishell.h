@@ -24,6 +24,7 @@ typedef struct		s_variable
 typedef struct		s_arg
 {
 	char			**arguments;
+	int				*fd;
 }					t_arg;
 
 typedef struct		s_flags

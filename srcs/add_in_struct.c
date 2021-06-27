@@ -56,9 +56,15 @@ int	add_in_arg(t_all *all)
 	while (i < all->count)
 	{
 		tmp[i].arguments = all->arg[i].arguments;
+		tmp[i].fd = all->arg[i].fd;
 		i++;
 	}
 	tmp[i].arguments = NULL;
+	tmp[i].fd = (int *)malloc(sizeof(int) * 2);
+	if (tmp[i].fd == NULL)
+		return (0);
+	tmp[i].fd[0] = 0;
+	tmp[i].fd[1] = 1;
 	free(all->arg);
 	all->arg = tmp;
 	return (1);

@@ -221,7 +221,7 @@ void			unset(t_list *list, t_all *all)
 	}
 }
 
-void	another_com(t_all *all)
+void	another_com(t_all *all, int i)
 {
 	pid_t pid;
 	int status;
@@ -235,7 +235,10 @@ void	another_com(t_all *all)
 	}
 	else if (pid == 0)
 	{
-		execve(all->arg[0].arguments[0], all->arg[0].arguments, NULL);    
+		// printf("fd 0:%d\nfd 1:%d\n***command: %s ***\n", all->arg[i].fd[0], all->arg[i].fd[1], all->arg[i].arguments[0]);
+		dup2(all->arg[i].fd[1], 1);
+		dup2(all->arg[i].fd[0], 0);
+		execve(all->arg[i].arguments[0], all->arg[i].arguments, NULL);    
 	}
 	else
 	{
@@ -245,9 +248,13 @@ void	another_com(t_all *all)
 		}
 		else if (WIFEXITED(status))
 			rez = WEXITSTATUS(status);
-		else
-			printf("BAD");
+		// else
+		// 	printf("BAD");
 	}
+	if (all->arg[i].fd[0] != 0)
+		close(all->arg[i].fd[0]);
+	if (all->arg[i].fd[1] != 1)
+		close(all->arg[i].fd[1]);
 }
 
 void	parse_command(t_all *all, t_list *list)
@@ -258,22 +265,23 @@ void	parse_command(t_all *all, t_list *list)
 	all->i = 1;
 	while (i <= all->count)
 	{
-		if (all->com[i].exp)
-			sort_export(list);
-		else if (all->com[i].exp_add)
-			add_export(list, all);
-		else if (all->com[i].env)
-			output_list(list);
-		else if (all->com[i].unset)
-			unset(list, all);
-		else if (all->com[i].pwd)
-			get_pwd(all);
-		else if (all->com[i].cd)
-			chdir(all->arg->arguments[i + 1]);
-		else if (all->com[i].exit)
-			get_exit(all);
-		else if (all->com[i].another)
-			another_com(all);
+		// if (all->com[i].exp)
+		// 	sort_export(list);
+		// else if (all->com[i].exp_add)
+		// 	add_export(list, all);
+		// else if (all->com[i].env)
+		// 	output_list(list);
+		// else if (all->com[i].unset)
+		// 	unset(list, all);
+		// else if (all->com[i].pwd)
+		// 	get_pwd(all);
+		// else if (all->com[i].cd)
+		// 	chdir(all->arg->arguments[i + 1]);
+		// else if (all->com[i].exit)
+		// 	get_exit(all);
+		// else if (all->com[i].another)
+		// printf("fd 0:%d\nfd 1:%d\n***command: %s ***\n", all->fd[i][0], all->fd[i][1], all->arg[i].arguments[0]);
+		another_com(all, i);
 		i++;
 	}
 }

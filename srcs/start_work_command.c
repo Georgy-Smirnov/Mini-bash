@@ -1,6 +1,5 @@
 #include "../includes/minishell.h"
 
-
 void	print_struct(t_all *all)
 {
 	int i = 0;
@@ -28,6 +27,8 @@ void	print_struct(t_all *all)
 		printf("less_than: %d\n", all->flags[i].less_than);
 		printf("greater_than: %d\n", all->flags[i].greater_than);
 		printf("d_greater_than: %d\n", all->flags[i].d_greater_than);
+		printf("*******************************\n");
+		printf("%d---%d\n", all->arg[i].fd[0], all->arg[i].fd[1]);
 		printf("*******************************\n");
 		print_d_array(all->arg[i].arguments);
 		i++;
@@ -61,9 +62,57 @@ void	check_build_in_command(t_all *all)
 	}
 }
 
+int	open_fd(t_all *all)
+{
+	int i = 0;
+	int tmp[2];
+	int fd = -2;
+	
+	while (i <= all->count)
+	{
+		if (all->flags[i].pipe)
+		{
+			pipe(tmp);
+			all->arg[i].fd[1] = tmp[1];
+			all->arg[i + 1].fd[0] = tmp[0];
+		}
+		if (all->flags[i].greater_than)
+		{
+			if (fd != -2)
+				close(fd);
+			fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_TRUNC, S_IWRITE | S_IREAD);
+			if (fd == -1)
+				return (0);
+			all->arg[i].fd[1] = fd;
+		}
+		if (all->flags[i].d_greater_than)
+		{
+			if (fd != -2)
+				close(fd);
+			fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_APPEND, S_IWRITE | S_IREAD);
+			if (fd == -1)
+				return (0);
+			all->arg[i].fd[1] = fd;
+		}
+		// if (all->flags[i].less_than)
+		// {
+		// 	if (fd != -2)
+		// 		close(fd);
+		// 	fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_APPEND, S_IWRITE | S_IREAD);
+		// 	if (fd == -1)
+		// 		return (0);
+		// 	all->arg[i].fd[1] = fd;
+		// }
+		i++;
+	}
+	return (1);
+}
+
 int	start_work_command(t_all *all, t_list *list)
 {
+	if (open_fd(all) == 0)
+		return (0);
 	parse_command(all, list);
-	print_struct(all);
+	// print_struct(all);
 	return (1);
 }

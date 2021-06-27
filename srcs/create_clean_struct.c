@@ -4,6 +4,8 @@ void	zero_b(t_all *tmp)
 {
 	tmp->count = 0;
 	tmp->arg[0].arguments = NULL;
+	tmp->arg[0].fd[0] = 0;
+	tmp->arg[0].fd[1] = 1;
 	tmp->com[0].exp = 0;
 	tmp->com[0].exp_add = 0;
 	tmp->com[0].unset = 0;
@@ -36,6 +38,9 @@ t_all	*create_struct(void)
 	tmp->flags = (t_flags *)malloc(sizeof(t_flags));
 	if (tmp->flags == NULL)
 		return (NULL);
+	tmp->arg[0].fd = (int *)malloc(sizeof(int) * 2);
+	if (tmp->arg[0].fd == NULL)
+		return (NULL);
 	zero_b(tmp);
 	return (tmp);
 }
@@ -65,6 +70,7 @@ void	clean_struct(t_all *all)
 	while (i <= all->count)
 	{
 		clean_d_array(all->arg[i].arguments);
+		free(all->arg[i].fd);
 		i++;
 	}
 	free(all->arg);
