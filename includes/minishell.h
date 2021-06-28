@@ -53,6 +53,8 @@ typedef struct		s_all
 {
 	int				i;
 	int				count;
+	int				tmp_fd1;
+	int				tmp_fd0;
 	t_command		*com;
 	t_arg			*arg;
 	t_flags			*flags;
@@ -81,9 +83,11 @@ char	*add_one_symbol_in_end(char *str, char c);
 
 void	parse_command(t_all *all, t_list *list);
 t_list	*create_list(char **envp);
-void	output_list(t_list *list);
-void	get_pwd(t_all *all);
+void	output_list(t_list *list, t_all *all, int i);
+void	get_pwd(t_all *all, int i);
 void    get_exit(t_all *all);
+void	dup_fd(t_all *all, int i);
+void	close_fd(t_all *all, int i);
 char	*put_end_of_string();
 char	*add_one_symbol_in_end(char *str, char c);
 

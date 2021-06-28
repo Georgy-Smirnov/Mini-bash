@@ -1,13 +1,34 @@
 #include "../includes/minishell.h"
 
-void	output_list(t_list *list)
+void	dup_fd(t_all *all, int i)
 {
+	all->tmp_fd1 = dup(1);
+	dup2(0, all->tmp_fd0);
+	printf("");
+	dup2(all->arg[i].fd[1], 1);
+	dup2(all->arg[i].fd[0], 0);
+}
+
+void	close_fd(t_all *all, int i)
+{
+	if (all->arg[i].fd[0] != 0)
+		close(all->arg[i].fd[0]);
+	if (all->arg[i].fd[1] != 1)
+		close(all->arg[i].fd[1]);
+	dup2(all->tmp_fd1, 1);
+	dup2(all->tmp_fd0, 0);
+}
+
+void	output_list(t_list *list, t_all *all, int i)
+{
+	dup_fd(all, i);
 	while (list->next != NULL)
 	{
 		list = list->next;
 		if (ft_strchr(list->content, '='))
 			printf("%s\n", list->content);
 	}
+	close_fd(all, i);
 }
 
 t_list	*create_list(char **envp)
@@ -118,7 +139,7 @@ void	output_export(t_list *list)
 	}
 }
 
-void	sort_export(t_list *list)
+void	sort_export(t_list *list, t_all *all, int i)
 {
 	t_list *copy;
 	t_list *next;
@@ -126,6 +147,7 @@ void	sort_export(t_list *list)
 	char *str2;
 	char *tmp;
 
+	dup_fd(all, i);
 	copy = list->next;
 	next = list->next->next;
 	while (copy->next != NULL)
@@ -146,6 +168,7 @@ void	sort_export(t_list *list)
 		next = copy;
 	}
 	output_export(list);
+	close_fd(all, i);
 }
 
 int				exist_value_env(t_list *list, char *value)
@@ -173,7 +196,6 @@ int				exist_value_env(t_list *list, char *value)
 	}
 	return (0);
 }
-
 
 void			unset(t_list *list, t_all *all)
 {
@@ -238,7 +260,7 @@ void	another_com(t_all *all, int i)
 		// printf("fd 0:%d\nfd 1:%d\n***command: %s ***\n", all->arg[i].fd[0], all->arg[i].fd[1], all->arg[i].arguments[0]);
 		dup2(all->arg[i].fd[1], 1);
 		dup2(all->arg[i].fd[0], 0);
-		execve(all->arg[i].arguments[0], all->arg[i].arguments, NULL);    
+		execve(all->arg[i].arguments[0], all->arg[i].arguments, NULL);
 	}
 	else
 	{
@@ -257,6 +279,8 @@ void	another_com(t_all *all, int i)
 		close(all->arg[i].fd[1]);
 }
 
+
+
 void	parse_command(t_all *all, t_list *list)
 {
 	int i;
@@ -265,23 +289,28 @@ void	parse_command(t_all *all, t_list *list)
 	all->i = 1;
 	while (i <= all->count)
 	{
-		// if (all->com[i].exp)
-		// 	sort_export(list);
-		// else if (all->com[i].exp_add)
-		// 	add_export(list, all);
-		// else if (all->com[i].env)
-		// 	output_list(list);
-		// else if (all->com[i].unset)
-		// 	unset(list, all);
-		// else if (all->com[i].pwd)
-		// 	get_pwd(all);
-		// else if (all->com[i].cd)
-		// 	chdir(all->arg->arguments[i + 1]);
-		// else if (all->com[i].exit)
-		// 	get_exit(all);
-		// else if (all->com[i].another)
-		// printf("fd 0:%d\nfd 1:%d\n***command: %s ***\n", all->fd[i][0], all->fd[i][1], all->arg[i].arguments[0]);
-		another_com(all, i);
+		if (all->com[i].exp)
+			sort_export(list, all, i);
+		else if (all->com[i].exp_add)
+			add_export(list, all);
+		else if (all->com[i].env)
+			output_list(list, all, i);
+		else if (all->com[i].unset)
+			unset(list, all);
+		else if (all->com[i].pwd)
+			get_pwd(all, i);
+		else if (all->com[i].cd)
+			chdir(all->arg->arguments[i + 1]);
+		else if (all->com[i].exit)
+			get_exit(all);
+		else if (all->com[i].another)
+			another_com(all, i);
+		// else
+		// {
+		// 	write(1, "minishell: ", 11);
+		// 	write(1, all->arg[i].arguments[0], ft_strlen(all->arg[i].arguments[0]));
+		// 	write(1, ": command not found\n", 20);
+		// }
 		i++;
 	}
 }
