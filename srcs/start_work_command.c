@@ -82,7 +82,7 @@ int	open_fd(t_all *all)
 		{
 			if (fd != -2)
 				close(fd);
-			fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_TRUNC, S_IWRITE | S_IREAD);
+			fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_TRUNC, 0777);
 			if (fd == -1)
 				return (0);
 			all->arg[i].fd[1] = fd;
@@ -91,8 +91,8 @@ int	open_fd(t_all *all)
 		{
 			if (fd != -2)
 				close(fd);
-			fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_APPEND, S_IWRITE | S_IREAD);
-			if (fd == -1)
+			fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_APPEND, 0777);
+				if (fd == -1)
 				return (0);
 			all->arg[i].fd[1] = fd;
 		}

@@ -3,7 +3,7 @@
 void	dup_fd(t_all *all, int i)
 {
 	all->tmp_fd1 = dup(1);
-	dup2(0, all->tmp_fd0);
+	all->tmp_fd0 = dup(0);
 	printf("");
 	dup2(all->arg[i].fd[1], 1);
 	dup2(all->arg[i].fd[0], 0);
