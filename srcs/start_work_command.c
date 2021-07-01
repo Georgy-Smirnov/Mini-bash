@@ -64,14 +64,53 @@ void	check_build_in_command(t_all *all)
 	}
 }
 
+char *put_name_file(char *str)
+{
+	char *rez;
+	int i;
+	int q;
+	int count;
+
+	i = 0;
+	count = 0;
+	if (str[0] == '/')
+	{
+		while (str[i])
+		{
+			if (str[i] == '/')
+			{
+				count = 0;
+				q = i;
+			}
+			count++;
+			i++;
+		}
+		i= 0;
+		q++;
+		while (str[q])
+		{
+			rez[i] = str[q];
+			i++;
+			q++;
+		}
+		rez[i] = 0;
+		return (rez);
+	}
+	else
+		return (str);
+}
+
 int	open_fd(t_all *all)
 {
 	int i = 0;
 	int tmp[2];
 	int fd = -2;
+	char *tmp_str;
 	
-	while (i <= all->count)
+	while (i < all->count)
 	{
+		if (i < all->count)
+			tmp_str = put_name_file(all->arg[i + 1].arguments[0]);
 		if (all->flags[i].pipe)
 		{
 			pipe(tmp);
@@ -82,7 +121,7 @@ int	open_fd(t_all *all)
 		{
 			if (fd != -2)
 				close(fd);
-			fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_TRUNC, 0777);
+			fd = open(tmp_str, O_CREAT | O_RDWR |  O_TRUNC, 0777);
 			if (fd == -1)
 				return (0);
 			all->arg[i].fd[1] = fd;
@@ -91,20 +130,20 @@ int	open_fd(t_all *all)
 		{
 			if (fd != -2)
 				close(fd);
-			fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_APPEND, 0777);
+			fd = open(tmp_str, O_CREAT | O_RDWR |  O_APPEND, 0777);
 				if (fd == -1)
 				return (0);
 			all->arg[i].fd[1] = fd;
 		}
-		// if (all->flags[i].less_than)
-		// {
-		// 	if (fd != -2)
-		// 		close(fd);
-		// 	fd = open(all->arg[i + 1].arguments[0], O_CREAT | O_RDWR |  O_APPEND, S_IWRITE | S_IREAD);
-		// 	if (fd == -1)
-		// 		return (0);
-		// 	all->arg[i].fd[0] = fd;
-		// }
+		if (all->flags[i].less_than)
+		{
+			if (fd != -2)
+				close(fd);
+			fd = open(tmp_str, O_CREAT | O_RDWR, 0777);
+			if (fd == -1)
+				return (0);
+			all->arg[i].fd[0] = fd;
+		}
 		i++;
 	}
 	return (1);

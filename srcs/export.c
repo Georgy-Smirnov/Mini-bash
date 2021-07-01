@@ -252,12 +252,11 @@ void	another_com(t_all *all, int i)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("fork"); /* произошла ошибка */
-		exit(1); /*выход из родительского процесса*/
+		perror("fork");
+		exit(1);
 	}
 	else if (pid == 0)
 	{
-		// printf("fd 0:%d\nfd 1:%d\n***command: %s ***\n", all->arg[i].fd[0], all->arg[i].fd[1], all->arg[i].arguments[0]);
 		dup2(all->arg[i].fd[1], 1);
 		dup2(all->arg[i].fd[0], 0);
 		execve(all->arg[i].arguments[0], all->arg[i].arguments, NULL);
@@ -270,8 +269,6 @@ void	another_com(t_all *all, int i)
 		}
 		else if (WIFEXITED(status))
 			rez = WEXITSTATUS(status);
-		// else
-		// 	printf("BAD");
 	}
 	if (all->arg[i].fd[0] != 0)
 		close(all->arg[i].fd[0]);
@@ -279,7 +276,17 @@ void	another_com(t_all *all, int i)
 		close(all->arg[i].fd[1]);
 }
 
-
+void	ft_echo(t_all * all, int i)
+{
+	int j = 1;
+	while (all->arg[i].arguments[j])
+	{
+		write(1, all->arg[i].arguments[j], ft_strlen(all->arg[i].arguments[j]));
+		write(1, " ", 1);
+		j++;
+	}
+	write (1, "\n", 1);
+}
 
 void	parse_command(t_all *all, t_list *list)
 {
@@ -295,6 +302,8 @@ void	parse_command(t_all *all, t_list *list)
 			add_export(list, all);
 		else if (all->com[i].env)
 			output_list(list, all, i);
+		else if (all->com[i].echo)
+			ft_echo(all, i);
 		else if (all->com[i].unset)
 			unset(list, all);
 		else if (all->com[i].pwd)
@@ -305,12 +314,15 @@ void	parse_command(t_all *all, t_list *list)
 			get_exit(all);
 		else if (all->com[i].another)
 			another_com(all, i);
-		// else
-		// {
-		// 	write(1, "minishell: ", 11);
-		// 	write(1, all->arg[i].arguments[0], ft_strlen(all->arg[i].arguments[0]));
-		// 	write(1, ": command not found\n", 20);
-		// }
-		i++;
+		else
+		{
+			write(1, "minishell: ", 11);
+			write(1, all->arg[i].arguments[0], ft_strlen(all->arg[i].arguments[0]));
+			write(1, ": command not found\n", 20);
+		}
+		if (all->flags[i].less_than == 1 || all->flags[i].greater_than == 1 || all->flags[i].d_greater_than == 1)
+			i += 2;
+		else
+			i++;
 	}
 }

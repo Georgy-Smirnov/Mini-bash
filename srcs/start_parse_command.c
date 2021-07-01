@@ -237,7 +237,7 @@ int	start_parse_command(char *str, t_list *list)
 			clean_struct(all);
 			all = create_struct();
 		}
-		if (str[i] == 0)
+		if (str[i] == 0 || (str[i] == ' ' && str[i + 1] == 0))
 		{
 			if (start_work_command(all, list) == 0)
 				return (0);

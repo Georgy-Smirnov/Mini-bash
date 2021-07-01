@@ -24,6 +24,8 @@ int	check_errors(char *str)
 	i = 0;
 	j = 0;
 	i = skip_space(str, i);
+	if (str[i] == 0)
+		return (1);
 	if (str[i] == ';' || str[i] == '|' || str[i] == '<' || str[i] == '>')
 		return (print_error());
 	while (str[i])

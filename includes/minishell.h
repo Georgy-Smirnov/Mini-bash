@@ -38,15 +38,15 @@ typedef struct		s_flags
 typedef struct		s_command
 {
 	short int		exp;
-	short int		exp_add; // ели ноль, то просто вывод отсортированного енв, если 1, значит добавить в енв
+	short int		exp_add;
 	short int		unset;
 	short int		env;
-	short int		echo;	//флаг echo
-	short int		n;		//флаг -n для echo
+	short int		echo;
+	short int		n;
 	short int		cd;
 	short int		pwd;
 	short int		exit;
-	short int		another; // другая команда, поиск бинарника
+	short int		another;
 }					t_command;
 
 typedef struct		s_all
