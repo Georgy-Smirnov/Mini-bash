@@ -9,6 +9,7 @@
 # include <termcap.h>
 # include <curses.h>
 # include <string.h>
+#include <signal.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>

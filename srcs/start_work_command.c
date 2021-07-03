@@ -86,6 +86,9 @@ char *put_name_file(char *str)
 			i++;
 		}
 		i= 0;
+		rez = (char *)malloc(sizeof(char) * count + 1);
+		if (rez == NULL)
+			return (rez);
 		q++;
 		while (str[q])
 		{
@@ -97,7 +100,11 @@ char *put_name_file(char *str)
 		return (rez);
 	}
 	else
-		return (str);
+	{
+		rez = ft_strdup(str);
+		return (rez);
+	}
+		
 }
 
 int	open_fd(t_all *all)
@@ -131,7 +138,7 @@ int	open_fd(t_all *all)
 			if (fd != -2)
 				close(fd);
 			fd = open(tmp_str, O_CREAT | O_RDWR |  O_APPEND, 0777);
-				if (fd == -1)
+			if (fd == -1)
 				return (0);
 			all->arg[i].fd[1] = fd;
 		}
@@ -144,6 +151,8 @@ int	open_fd(t_all *all)
 				return (0);
 			all->arg[i].fd[0] = fd;
 		}
+		if (i < all->count)
+			free(tmp_str);
 		i++;
 	}
 	return (1);
