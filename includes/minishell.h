@@ -16,6 +16,14 @@
 
 # include "../libft/libft.h"
 
+typedef struct		s_for_normy
+{
+	char			*str1;
+	char			*str2;
+	char			*tmp;
+	char			flag;
+}					t_for_normy;
+
 typedef struct		s_variable
 {
 	char			*name_var;
@@ -60,6 +68,8 @@ typedef struct		s_all
 	t_arg			*arg;
 	t_flags			*flags;
 	t_variable		var;
+	t_for_normy		nor;
+
 }					t_all;
 
 typedef struct		s_hystory
@@ -82,6 +92,7 @@ char	*add_if_two_quote(char *one_arg, char *str, int *i, t_list *list);
 int		add_if_dollar(char *str, int *i, t_list *list, char **one_arg);
 char	*add_one_symbol_in_end(char *str, char c);
 
+
 void	parse_command(t_all *all, t_list *list);
 t_list	*create_list(char **envp);
 void	output_list(t_list *list, t_all *all, int i);
@@ -89,6 +100,20 @@ void	get_pwd(t_all *all, int i);
 void    get_exit(t_all *all);
 void	dup_fd(t_all *all, int i);
 void	close_fd(t_all *all, int i);
+void	ft_echo(t_all * all, int i);
+void	another_com(t_all *all, int i);
+void	add_export(t_list *list, t_all *all);
+void	unset(t_list *list, t_all *all);
+void	sort_export(t_list *list, t_all *all, int i);
+void	get_variable(t_all *all);
+void	free_get_variable(t_all *all);
+
+
+
+
+
+
+
 char	*put_end_of_string();
 char	*add_one_symbol_in_end(char *str, char c);
 
@@ -97,10 +122,11 @@ int		add_in_struct(t_all *all);
 void	clean_struct(t_all *all);
 
 void	print_struct(t_all *all);
-int	skip_space(char *str, int i);
-int	check_errors(char *str);
+int		skip_space(char *str, int i);
+int		check_errors(char *str);
 
 
 void	check_build_in_command(t_all *all);
+
 
 #endif
