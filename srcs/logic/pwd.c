@@ -2,10 +2,11 @@
 
 void	get_pwd(t_all *all, int i)
 {
-	char *buf;
+	char	*buf;
 
 	dup_fd(all, i);
-	if (!(buf = malloc(100000)))
+	buf = malloc(100000);
+	if (!(buf))
 		return ;
 	getcwd(buf, 100000);
 	write(1, buf, ft_strlen(buf));

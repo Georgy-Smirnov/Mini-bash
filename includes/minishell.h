@@ -22,13 +22,9 @@ typedef struct		s_for_normy
 	char			*str2;
 	char			*tmp;
 	char			flag;
+	int				unset_i;
+	int				unset_j;
 }					t_for_normy;
-
-typedef struct		s_variable
-{
-	char			*name_var;
-	char			*value_var;
-}					t_variable;
 
 typedef struct		s_arg
 {
@@ -67,7 +63,6 @@ typedef struct		s_all
 	t_command		*com;
 	t_arg			*arg;
 	t_flags			*flags;
-	t_variable		var;
 	t_for_normy		nor;
 
 }					t_all;
@@ -107,7 +102,6 @@ void	another_com(t_all *all, int i);
 void	add_export(t_list *list, t_all *all);
 void	unset(t_list *list, t_all *all);
 void	sort_export(t_list *list, t_all *all, int i);
-void	get_variable(t_all *all);
 void	free_get_variable(t_all *all);
 
 

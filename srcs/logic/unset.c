@@ -1,13 +1,15 @@
 #include "../../includes/minishell.h"
 
-int				exist_value_env(t_list *list, char *value)
+int	exist_value_env(t_all *all, t_list *list, char *value)
 {
-	t_list *copy;
-	int i;
-	char *str;
+	t_list	*copy;
+	char	*str;
+	int		i;
 
 	copy = list;
 	i = 0;
+	all->nor.unset_i = 0;
+	all->nor.unset_j = 0;
 	while (copy->next != NULL)
 	{
 		copy = copy->next;
@@ -26,47 +28,28 @@ int				exist_value_env(t_list *list, char *value)
 	return (0);
 }
 
-void			unset(t_list *list, t_all *all)
+void	unset(t_list *list, t_all *all)
 {
-	t_list *copy;
-	t_list *before;
-	t_list *after;
-	int i;
-	int j;
-	int k;
-	char *str;
-	char *var;
-	int boolean;
+	t_list	*copy;
+	t_list	*before;
+	t_list	*after;
 
 	copy = list;
-	i = 0;
-	j = 0;
-	k = 0;
-	get_variable(all);
-	var = ft_strjoin(all->var.name_var, all->var.value_var);
-	boolean = exist_value_env(list, var);
-	if (boolean)
+	if (exist_value_env(all, list, all->arg->arguments[all->i]))
 	{
 		while (copy->next != NULL)
 		{
 			copy = copy->next;
-			str = copy->content;
-			while (str[i] == var[i] && str[i] != '\0' && var[i] != '\0')
-				i++;
-			if (ft_strlen(var) == i && (str[i] == '=' || ft_strchr(var, '=') == 0))
+			if (!(ft_strncmp(copy->content, all->arg->arguments[all->i], \
+				ft_strlen(all->arg->arguments[all->i]))))
 				break ;
-			i = 0;
-			j++;
+			all->nor.unset_i++;
 		}
 		after = copy->next;
 		before = list->next;
-		while (k != (j - 1))
-		{
+		while (all->nor.unset_j++ != (all->nor.unset_i - 1))
 			before = before->next;
-			k++;
-		}
 		free(copy);
-		free(var);
 		if (before->next != NULL)
 			before->next = after;
 	}
