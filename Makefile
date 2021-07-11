@@ -1,36 +1,57 @@
-#
-#SRCS		=	main.c \
-				srcs/read.c \
-				srcs/start_parse_command.c \
-				srcs/check_errors.c \
-				srcs/add_in_struct.c \
-				srcs/do_if_quotes.c \
-				srcs/create_clean_struct.c \
-				srcs/start_work_command.c \
-				srcs/export.c \
-				srcs/unset.c
 
-#NAME		=	minishell
+SRCS		=	main.c \
+				srcs/parsing/add_in_struct.c \
+				srcs/parsing/change_path.c \
+				srcs/parsing/check_errors.c \
+				srcs/parsing/create_clean_struct.c \
+				srcs/parsing/do_if_quotes.c \
+				srcs/parsing/open_fd.c \
+				srcs/parsing/press_key.c  \
+				srcs/parsing/put_variable.c \
+				srcs/parsing/read.c \
+				srcs/parsing/start_parse_command.c \
+				srcs/parsing/start_work_command.c \
+				srcs/parsing/utils.c \
+				srcs/parsing/write_one_arg.c \
+				srcs/logic/another_com.c \
+				srcs/logic/echo.c \
+				srcs/logic/env.c \
+				srcs/logic/exit.c \
+				srcs/logic/export.c \
+				srcs/logic/export_add.c \
+				srcs/logic/parse_command.c \
+				srcs/logic/pwd.c \
+				srcs/logic/unset.c \
+				srcs/utils/create_list.c \
+				srcs/utils/dup_close_fd.c \
 
-#OBJS		=	${SRCS:%.c=%.o}
+NAME		=	minishell
 
-#all:			${NAME}
+GCC			=	gcc
 
-#${NAME}:		${OBJS}
-#				${MAKE} -C ./libft #
-#				gcc -o ${NAME} ${OBJS} libft/Libft.a -ltermcap
+CFLAG		=	-Wall -Werror -Wextra
 
-#%.o:			%.c
-#				gcc -c $< -o $@
+OBJS		=	${SRCS:%.c=%.o}
 
-#clean:
-#			rm -f ${OBJS}
+all:			${NAME}
 
-#fclean:		clean
-#			rm -f ${NAME}
+${NAME}:		${OBJS}
+				${MAKE} -C ./libft
+				${GCC} ${CFLAGS} -o ${NAME} ${OBJS} libft/Libft.a -ltermcap
 
-#re:			fclean all
+%.o:			%.c
+				${GCC} ${CFLAGS} -c $< -o $@
 
-#.PHONY: all clean fclean re
+clean:
+			make clean -C ./libft
+			rm -f ${OBJS}
+
+fclean:		clean
+			make fclean -C ./libft
+			rm -f ${NAME}
+
+re:			fclean all
+
+.PHONY: all clean fclean re
 
 

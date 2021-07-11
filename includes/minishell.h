@@ -16,6 +16,8 @@
 
 # include "../libft/libft.h"
 
+# define ARG all->arg[all->count].arguments
+
 typedef struct		s_for_normy
 {
 	char			*str1;
@@ -74,17 +76,23 @@ typedef struct		s_hystory
 		int	count;
 }					t_hystory;
 
-int		ft_putchar(int c);
-char	*put_end_string(void);
 int		start_minishell(struct termios term, char **env);
+
+char	*do_if_backspace(struct termios term, char *rez);
+char	*do_if_up(struct termios term, char *rez, t_hystory *hystory);
+char	*do_if_down(struct termios term, char *rez, t_hystory *hystory);
+int		ft_putchar(int c);
+char	*put_end_of_string(void);
+int		work_with_fd(t_all *all, int i);
+char	*put_variable(char *str, int *i, t_list *list);
+char	*change_one_arg(char *one_arg, t_all *all, t_list *list);
+int		write_one_arg(char **one_arg, char *str, int *i, t_list *list);
 int		start_parse_command(char *str, t_list *list);
 int		start_work_command(t_all *all, t_list *list);
-
 void	print_d_array(char **hystory);
 int		ft_strcmp(char *s1, char *s2);
 int		count_str_in_array(char **hystory);
 char 	**add_in_array(char **hystory, char *str);
-
 char	*add_if_one_quote(char *one_arg, char *str, int *i);
 char	*add_if_two_quote(char *one_arg, char *str, int *i, t_list *list);
 int		add_if_dollar(char *str, int *i, t_list *list, char **one_arg);
@@ -103,13 +111,6 @@ void	another_com(t_all *all, int i);
 void	add_export(t_list *list, t_all *all);
 void	unset(t_list *list, t_all *all);
 void	sort_export(t_list *list, t_all *all, int i);
-void	free_get_variable(t_all *all);
-
-
-
-
-
-
 
 char	*put_end_of_string();
 char	*add_one_symbol_in_end(char *str, char c);
@@ -124,6 +125,5 @@ int		check_errors(char *str);
 
 
 void	check_build_in_command(t_all *all);
-
 
 #endif

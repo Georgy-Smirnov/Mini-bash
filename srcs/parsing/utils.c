@@ -56,7 +56,7 @@ char	**add_in_array(char **hystory, char *str)
 	return (rez);
 }
 
-char	*put_end_string(void)
+char	*put_end_of_string(void)
 {
 	char	*rez;
 

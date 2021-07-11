@@ -6,7 +6,7 @@
 /*   By: kjaco <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 21:44:52 by kjaco             #+#    #+#             */
-/*   Updated: 2021/05/27 19:42:14 by kjaco            ###   ########.fr       */
+/*   Updated: 2021/05/26 14:40:57 by kjaco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ char			*ft_strchr(char *s, int c);
 char			*ft_strrchr(char *s, int c);
 char			*ft_strnstr(char *haystack, char *needle, size_t len);
 int				ft_strncmp(char *s1, char *s2, size_t n);
+int				ft_strcmp(char *s1, char *s2);
 int				ft_atoi(const char *str);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
@@ -61,7 +62,6 @@ char			*ft_strjoin_with_frees1(char *s1, char *s2);
 int				charinstr(char a, char *str);
 int				get_next_line(int fd, char **line);
 char			*ft_dellastchar(char *str);
-int	ft_strcmp(char *s1, char *s2);
 
 typedef struct s_list
 {
