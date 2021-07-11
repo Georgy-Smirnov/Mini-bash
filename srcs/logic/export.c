@@ -48,13 +48,13 @@ void	sort_export(t_list *list, t_all *all, int i)
 	{
 		while (next->next != NULL)
 		{
-			all->nor.str1 = (char *)(copy->content);
-			all->nor.str2 = (char *)(next->content);
-			if (ft_strcmp(all->nor.str1, all->nor.str2) > 0)
+			all->n.str1 = (char *)(copy->content);
+			all->n.str2 = (char *)(next->content);
+			if (ft_strcmp(all->n.str1, all->n.str2) > 0)
 			{
-				all->nor.tmp = all->nor.str1;
-				copy->content = all->nor.str2;
-				next->content = all->nor.tmp;
+				all->n.tmp = all->n.str1;
+				copy->content = all->n.str2;
+				next->content = all->n.tmp;
 			}
 			next = next->next;
 		}

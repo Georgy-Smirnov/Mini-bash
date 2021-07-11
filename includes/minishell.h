@@ -24,6 +24,7 @@ typedef struct		s_for_normy
 	char			flag;
 	int				unset_i;
 	int				unset_j;
+	int				l;
 }					t_for_normy;
 
 typedef struct		s_arg
@@ -63,7 +64,7 @@ typedef struct		s_all
 	t_command		*com;
 	t_arg			*arg;
 	t_flags			*flags;
-	t_for_normy		nor;
+	t_for_normy		n;
 
 }					t_all;
 

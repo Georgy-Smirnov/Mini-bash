@@ -6,10 +6,11 @@ int	exist_value_env(t_all *all, t_list *list, char *value)
 	char	*str;
 	int		i;
 
+	all->n.unset_i = 0;
+	all->n.unset_j = 0;
 	copy = list;
 	i = 0;
-	all->nor.unset_i = 0;
-	all->nor.unset_j = 0;
+	all->n.l = ft_strlen(all->arg->arguments[all->i]);
 	while (copy->next != NULL)
 	{
 		copy = copy->next;
@@ -30,26 +31,28 @@ int	exist_value_env(t_all *all, t_list *list, char *value)
 
 void	unset(t_list *list, t_all *all)
 {
-	t_list	*copy;
+	t_list	*c;
 	t_list	*before;
 	t_list	*after;
 
-	copy = list;
+	c = list;
 	if (exist_value_env(all, list, all->arg->arguments[all->i]))
 	{
-		while (copy->next != NULL)
+		while (c->next != NULL)
 		{
-			copy = copy->next;
-			if (!(ft_strncmp(copy->content, all->arg->arguments[all->i], \
-				ft_strlen(all->arg->arguments[all->i]))))
+			c = c->next;
+			if (!ft_strncmp(c->content, all->arg->arguments[all->i], all->n.l))
+			{
+				free(c->content);
 				break ;
-			all->nor.unset_i++;
+			}
+			all->n.unset_i++;
 		}
-		after = copy->next;
+		after = c->next;
 		before = list->next;
-		while (all->nor.unset_j++ != (all->nor.unset_i - 1))
+		while (all->n.unset_j++ != (all->n.unset_i - 1))
 			before = before->next;
-		free(copy);
+		free(c);
 		if (before->next != NULL)
 			before->next = after;
 	}
