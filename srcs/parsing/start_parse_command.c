@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -105,9 +105,9 @@ int	write_one_arg(char **one_arg, char *str, int *i, t_list *list)
 	}
 	else
 	{
-		*one_arg = add_one_symbol_in_end(*one_arg, str[*i]);
-		if (*one_arg == NULL)
-			return (0);
+	*one_arg = add_one_symbol_in_end(*one_arg, str[*i]);
+	if (*one_arg == NULL)
+		return (0);
 	}
 	if (str[*i] != 0)
 		(*i)++;
@@ -156,7 +156,7 @@ char *surch_path(t_list *list, char *str)
 	{
 		if (strncmp(list->content, "PATH=", 5) == 0)
 		{
-			rez = strdup(&list	->content[5]);
+			rez = strdup(&list->content[5]);
 			if (rez == NULL)
 				return (NULL);
 		}
@@ -175,9 +175,12 @@ char *surch_path(t_list *list, char *str)
 			return (NULL);
 		if (stat(path[i], &statbuf) == 0)
 		{
-			rez = ft_strdup(path[i]);
 			if (rez == NULL)
-				return (NULL);
+			{
+				rez = ft_strdup(path[i]);
+				if (rez == NULL)
+					return (NULL);
+			}
 		}
 		free(path[i]);
 		i++;
@@ -200,15 +203,17 @@ int	put_arguments(t_all *all, t_list *list, char *str, int *i)
 		if (write_one_arg(&one_arg, str, i, list) == 0)
 			return (0);
 	}
-	tmp = surch_path(list, one_arg);
-	if (tmp != NULL && all->arg[all->count].arguments == NULL && !our_func(one_arg))
-	{
-		free(one_arg);
-		one_arg = tmp;
-		all->com[all->count].another = 1;
-	}
 	if (*one_arg != 0)
+	{
+		tmp = surch_path(list, one_arg);
+		if (tmp != NULL && all->arg[all->count].arguments == NULL && !our_func(one_arg))
+		{
+			free(one_arg);
+			one_arg = tmp;
+			all->com[all->count].another = 1;
+		}
 		all->arg[all->count].arguments = add_in_array(all->arg[all->count].arguments, one_arg);
+	}
 	check_build_in_command(all);
 	if (check_flags(all, str, i) == 0)
 		return (0);

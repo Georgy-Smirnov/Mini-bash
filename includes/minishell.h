@@ -78,6 +78,8 @@ typedef struct		s_hystory
 		int	count;
 }					t_hystory;
 
+int		ft_putchar(int c);
+char	*put_end_string(void);
 int		start_minishell(struct termios term, char **env);
 int		start_parse_command(char *str, t_list *list);
 int		start_work_command(t_all *all, t_list *list);

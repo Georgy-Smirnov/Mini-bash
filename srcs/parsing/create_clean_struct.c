@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	zero_b(t_all *tmp)
 {
@@ -69,7 +69,7 @@ void	clean_struct(t_all *all)
 	i = 0;
 	while (i <= all->count)
 	{
-		// clean_d_array(all->arg[i].arguments);
+		clean_d_array(all->arg[i].arguments);
 		free(all->arg[i].fd);
 		i++;
 	}

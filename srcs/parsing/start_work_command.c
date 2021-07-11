@@ -1,4 +1,22 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
+
+void	print_d_array(char **hystory)
+{
+	int	i;
+
+	i = 0;
+	if (hystory == NULL)
+		ft_putstr_fd("!!!NULL!!!", 1);
+	else
+	{
+		while (hystory[i] != NULL)
+		{
+			ft_putstr_fd(hystory[i], 1);
+			i++;
+			write(1, "\n", 1);
+		}
+	}
+}
 
 void	print_struct(t_all *all)
 {
@@ -39,28 +57,31 @@ void	print_struct(t_all *all)
 
 void	check_build_in_command(t_all *all)
 {
-	if (!ft_strncmp(all->arg[all->count].arguments[0], "export", 6) && all->arg[all->count].arguments[1] == NULL)
-		all->com[all->count].exp = 1;
-	else if (!ft_strncmp(all->arg[all->count].arguments[0], "export", 6))
+	if (all->arg[all->count].arguments != NULL)
 	{
-		all->com[all->count].exp = 0;
-		all->com[all->count].exp_add = 1;
-	}
-	else if (!ft_strncmp(all->arg[all->count].arguments[0], "unset", 5))
-		all->com[all->count].unset = 1;
-	else if (!ft_strncmp(all->arg[all->count].arguments[0], "env", 3))
-		all->com[all->count].env = 1;
-	else if (!ft_strncmp(all->arg[all->count].arguments[0], "cd", 2))
-		all->com[all->count].cd = 2;
-	else if (!ft_strncmp(all->arg[all->count].arguments[0], "pwd", 3))
-		all->com[all->count].pwd = 1;
-	else if (!ft_strncmp(all->arg[all->count].arguments[0], "exit", 4))
-		all->com[all->count].exit = 1;
-	else if (!ft_strncmp(all->arg[all->count].arguments[0], "echo", 4))
-	{
-		all->com[all->count].echo = 1;
-		if (all->arg[all->count].arguments[1] != NULL && !ft_strncmp(all->arg[all->count].arguments[1], "-n", 2))
-			all->com[all->count].n = 1;
+		if (!ft_strncmp(all->arg[all->count].arguments[0], "export", 6) && all->arg[all->count].arguments[1] == NULL)
+			all->com[all->count].exp = 1;
+		else if (!ft_strncmp(all->arg[all->count].arguments[0], "export", 6))
+		{
+			all->com[all->count].exp = 0;
+			all->com[all->count].exp_add = 1;
+		}
+		else if (!ft_strncmp(all->arg[all->count].arguments[0], "unset", 5))
+			all->com[all->count].unset = 1;
+		else if (!ft_strncmp(all->arg[all->count].arguments[0], "env", 3))
+			all->com[all->count].env = 1;
+		else if (!ft_strncmp(all->arg[all->count].arguments[0], "cd", 2))
+			all->com[all->count].cd = 2;
+		else if (!ft_strncmp(all->arg[all->count].arguments[0], "pwd", 3))
+			all->com[all->count].pwd = 1;
+		else if (!ft_strncmp(all->arg[all->count].arguments[0], "exit", 4))
+			all->com[all->count].exit = 1;
+		else if (!ft_strncmp(all->arg[all->count].arguments[0], "echo", 4))
+		{
+			all->com[all->count].echo = 1;
+			if (all->arg[all->count].arguments[1] != NULL && !ft_strncmp(all->arg[all->count].arguments[1], "-n", 2))
+				all->com[all->count].n = 1;
+		}
 	}
 }
 
