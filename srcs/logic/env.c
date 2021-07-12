@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	output_list(t_list *list, t_all *all, int i)
 {

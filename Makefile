@@ -1,5 +1,13 @@
+#==================================>COLORS<====================================#
 
-SRCS		=	main.c \
+_RED		=	\e[31m
+_YELLOW		=	\e[33m
+_GREEN		=	\e[32m
+_END		=	\e[0m
+
+#==================================>FILES<=====================================#
+
+SRC			=	main.c \
 				srcs/parsing/add_in_struct.c \
 				srcs/parsing/change_path.c \
 				srcs/parsing/check_errors.c \
@@ -25,33 +33,64 @@ SRCS		=	main.c \
 				srcs/utils/create_list.c \
 				srcs/utils/dup_close_fd.c \
 
-NAME		=	minishell
+SRCS		=	$(SRC)
+
+#===============================>COMPILATIONS<=================================#
 
 GCC			=	gcc
 
-CFLAG		=	-Wall -Werror -Wextra
+CFLAGS		=	-Wall -Werror -Wextra
+
+TREMCAP		=	-ltermcap
+
+#===================================>DELETE<===================================#
+
+RM			=	rm -rf
+
+#=================================>DIRECTORIES<================================#
+
+DIR_HEAD	=	./includes
+
+LIB_HEAD	=	./libft/Libft.a
+
+#===============================>COMPILED_SOURCES<=============================#
 
 OBJS		=	${SRCS:%.c=%.o}
+
+NAME		=	minishell
+
+#================================>COMPILED_RULES<==============================#
 
 all:			${NAME}
 
 ${NAME}:		${OBJS}
-				${MAKE} -C ./libft
-				${GCC} ${CFLAG} -o ${NAME} ${OBJS} libft/Libft.a -ltermcap
+				@${MAKE} -C ./libft
+				@${GCC} ${CFLAG} -o ${NAME} ${OBJS} ${LIB_HEAD} ${TREMCAP}
+				@printf "\033[2K\r${_GREEN} Minishell create: '${NAME}'. ${_END}✅\n"
+
+#===========================>COMPILED_SOURCES_RULES<===========================#
 
 %.o:			%.c
-				${GCC} ${CFLAG} -c $< -o $@
+				@$(GCC) $(CFLAGS) -I $(DIR_HEAD) -c $< -o $@
+				@printf "\033[2K\r$(_YELLOW) Compiling $< $(_END)⌛"
+
+#===================================>NORM_RULES<===============================#
+
+norm:
+				@norminette .			
+
+#====================================>CLEAN_RULES<=============================#
 
 clean:
-			make clean -C ./libft
-			rm -f ${OBJS}
+			@make clean -C ./libft
+			@rm -f ${OBJS}
+			@printf "\033[2K\r${_RED} '".o"' has been deleted. ${_END}🗑️\n"
 
 fclean:		clean
-			make fclean -C ./libft
-			rm -f ${NAME}
+			@make fclean -C ./libft
+			@rm -f ${NAME}
+			@printf "\033[2K\r${_RED} '"${NAME}"' has been deleted. ${_END}🗑️\n"
 
 re:			fclean all
 
 .PHONY: all clean fclean re
-
-

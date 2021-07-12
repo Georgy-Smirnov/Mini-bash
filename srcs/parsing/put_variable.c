@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 int	compare_variables(char *variable, char *str)
 {
@@ -50,6 +50,12 @@ char	*put_variable(char *str, int *i, t_list *list)
 	char	*rez;
 
 	(*i)++;
+	if (str[*i] == '?' && (str[(*i) + 1] == 32 || str[(*i) + 1] == 0 \
+		|| str[(*i) + 1] == 34 || str[(*i) + 1] == 59 || str[(*i) + 1] == 36))
+	{
+		rez = ft_strdup(ft_itoa(g_err));
+		return (rez);
+	}
 	rez = put_value(str, i, list);
 	if (rez == NULL)
 	{

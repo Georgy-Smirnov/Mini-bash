@@ -10,7 +10,16 @@
 #                                                                              #
 # **************************************************************************** #
 
+# **************************************************************************** #
+
 ## START_MAKEFILE ##
+
+#==================================>COLORS<====================================#
+
+_RED		=	\e[31m
+_YELLOW		=	\e[33m
+_GREEN		=	\e[32m
+_END		=	\e[0m
 
 #==================================>FILES<=====================================#
 
@@ -97,32 +106,36 @@ NAME		=	Libft.a
 all:			${NAME}
 
 ${NAME}:		${OBJS}
-				${AR} ${NAME} ${OBJS}
-				ranlib ${NAME}
+				@${AR} ${NAME} ${OBJS}
+				@ranlib ${NAME}
+				@printf "\033[2K\r${_GREEN} Library create: '${NAME}'. ${_END}✅\n"
 
 #===========================>COMPILED_SOURCES_RULES<===========================#
 
 $(OBJS):		| $(DIR_OBJS)
 
 $(DIR_OBJS)%.o: $(DIR_SRCS)%.c
-				$(GCC) $(CFLAGS) -I $(DIR_HEAD) -c $< -o $@
+				@$(GCC) $(CFLAGS) -I $(DIR_HEAD) -c $< -o $@
+				@printf "\033[2K\r$(_YELLOW) Compiling $< $(_END)⌛"
 
 $(DIR_OBJS):
-				mkdir $(DIR_OBJS)
+				@mkdir $(DIR_OBJS)
 
 #===================================>NORM_RULES<===============================#
 
 norm:
-				norminette *.c
-				norminette *.h				
+				@norminette *.c
+				@norminette *.h				
 
 #====================================>CLEAN_RULES<=============================#
 
 clean:
-				${RM} ${DIR_OBJS}
+				@${RM} ${DIR_OBJS}
+				@printf "\033[2K\r${_RED} '".o"' has been deleted. ${_END}🗑️\n"
 
 fclean:			clean	
-				${RM} ${NAME}
+				@${RM} ${NAME}
+				@printf "\033[2K\r${_RED} '"${NAME}"' has been deleted. ${_END}🗑️\n"
 
 re:				fclean all
 

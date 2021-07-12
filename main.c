@@ -1,4 +1,4 @@
-#include "includes/minishell.h"
+#include "minishell.h"
 
 void	myquit(int sig)
 {
@@ -44,9 +44,10 @@ char	*put_term_name(char **env)
 	return (rez);
 }
 
-int	term_my_ref(struct termios term, int flag, char **env)
+int	term_my_ref(int flag, char **env)
 {
-	char	*term_name;
+	struct termios	term;
+	char			*term_name;
 
 	term_name = put_term_name(env);
 	if (term_name == NULL)
@@ -68,20 +69,19 @@ int	term_my_ref(struct termios term, int flag, char **env)
 
 int	main(int argc, char **argv, char **env)
 {
-	struct termios	term;
-
+	g_err = 0;
 	signal(SIGQUIT, myquit);
 	signal(SIGINT, mysigint);
 	if (argc == 1 && argv[0])
 	{
-		if (!term_my_ref(term, 1, env))
+		if (!term_my_ref(1, env))
 			return (1);
 		if (start_minishell(env) != 1)
 			return (1);
-		if (!term_my_ref(term, 2, env))
+		if (!term_my_ref(2, env))
 			return (1);
 	}
 	else
-		write(1, "Start minishell without arguments!\n", 35);
+		write(1, "\e[1;31mStart minishell without arguments!\n\e[0m", 46);
 	return (0);
 }

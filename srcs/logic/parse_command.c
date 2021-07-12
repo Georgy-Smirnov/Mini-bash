@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 int	parse_for_normy(t_all *all, t_list *list, int i)
 {
@@ -35,10 +35,11 @@ void	parse_command(t_all *all, t_list *list)
 	{
 		if (!(parse_for_normy(all, list, i)))
 		{
-			write(1, "minishell: ", 11);
+			write (1, "\e[1;31mMinishell% \e[0m", 22);
 			write(1, all->arg[i].arguments[0], \
 				ft_strlen(all->arg[i].arguments[0]));
 			write(1, ": command not found\n", 20);
+			g_err = 127;
 		}
 		if (all->flags[i].less_than == 1 || \
 			all->flags[i].greater_than == 1 || \

@@ -1,7 +1,10 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	check_buf(char *buf, char **rez, t_hystory *hys)
 {
+	char	**tmp;
+
+	tmp = rez;
 	if (!strcmp(buf, "\177"))
 		*rez = do_if_backspace(*rez);
 	else if (!(strcmp(buf, "\e[A")))
@@ -9,7 +12,7 @@ void	check_buf(char *buf, char **rez, t_hystory *hys)
 	else if (!(strcmp(buf, "\e[B")))
 		*rez = do_if_down(*rez, hys);
 	else if (!(strcmp(buf, "\e[C")) || !(strcmp(buf, "\e[D")))
-		rez = rez;
+		rez = tmp;
 	else
 	{
 		write (1, buf, 1);

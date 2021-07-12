@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 int	exist_value_env(t_all *all, t_list *list, char *value)
 {

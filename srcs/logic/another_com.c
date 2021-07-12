@@ -1,15 +1,13 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	another_com(t_all *all, int i)
 {
 	pid_t	pid;
-	int		status;
-	int		rez;
+	int		wstatus;
 
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("fork");
 		exit(1);
 	}
 	else if (pid == 0)
@@ -19,10 +17,9 @@ void	another_com(t_all *all, int i)
 	}
 	else
 	{
-		if (wait(0) == -1)
-			perror("wait() error");
-		else if (WIFEXITED(status))
-			rez = WEXITSTATUS(status);
+		wait(&wstatus);
+		if (WIFEXITED(wstatus))
+			g_err = WEXITSTATUS(wstatus);
 	}
 	close_fd(all, i);
 }

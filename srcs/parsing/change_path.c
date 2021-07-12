@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 int	our_func(char *str)
 {
@@ -46,12 +46,12 @@ char	*surch_path(t_list *list, char *str)
 {
 	int			i;
 	char		**path;
-	char		*rez;
 	struct stat	statbuf;
 
 	i = 0;
-	rez = NULL;
 	path = search_in_env(list);
+	if (path == NULL)
+		return (NULL);
 	while (path[i])
 	{
 		path[i] = add_one_symbol_in_end(path[i], '/');
@@ -59,15 +59,12 @@ char	*surch_path(t_list *list, char *str)
 		if (path[i] == NULL)
 			return (NULL);
 		if (stat(path[i], &statbuf) == 0)
-		{
-			if (rez == NULL)
-				rez = ft_strdup(path[i]);
-		}
+			return (ft_strdup(path[i]));
 		free(path[i]);
 		i++;
 	}
 	free(path);
-	return (rez);
+	return (NULL);
 }
 
 char	*change_one_arg(char *one_arg, t_all *all, t_list *list)
