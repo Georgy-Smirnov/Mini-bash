@@ -38,8 +38,13 @@ int	read_end_of_str(char **rez, t_hystory *hys)
 		check_buf(buf, rez, hys);
 		if (rez == NULL)
 			return (-5);
-		if (*buf == '\n' || strcmp(buf, "\4") == 0)
+		if (*buf == '\n')
 			break ;
+		if (!strcmp(buf, "\4"))
+		{
+			write(1, "exit\n", 5);
+			break ;
+		}
 	}
 	free(buf);
 	return (strcmp(buf, "\4"));

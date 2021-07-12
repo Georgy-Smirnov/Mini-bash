@@ -2,13 +2,7 @@
 
 void	myquit(int sig)
 {
-	int		pid;
-	int		status;
-
 	(void)sig;
-	pid = waitpid(-1, &status, WNOHANG);
-	if (!pid)
-		ft_putendl_fd("Quit: 3", 1);
 }
 
 void	mysigint(int sig)
@@ -17,11 +11,11 @@ void	mysigint(int sig)
 	int		status;
 
 	pid = waitpid(-1, &status, WNOHANG);
-	if (sig == SIGINT)
+	if (sig == SIGINT && pid)
 	{
 		ft_putchar_fd('\n', 1);
-		if (pid)
-			write (1, "\e[1;32mMinishell% \e[0m", 22);
+		write (1, "\e[1;32mMinishell% \e[0m", 22);
+		tputs(save_cursor, 1, ft_putchar);
 	}
 }
 
