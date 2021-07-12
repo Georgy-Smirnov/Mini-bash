@@ -47,7 +47,6 @@ char	*put_name_file(char *str)
 {
 	char	*rez;
 	int		i;
-	int		q;
 	int		count;
 
 	i = 0;
@@ -98,6 +97,7 @@ int	work_with_fd(t_all *all, int i)
 	int		fd;
 
 	fd = -2;
+	tmp_str = NULL;
 	if (i < all->count)
 		tmp_str = put_name_file(all->arg[i + 1].arguments[0]);
 	if (all->flags[i].pipe)

@@ -1,13 +1,13 @@
 #include "../../includes/minishell.h"
 
-void	check_buf(char *buf, char **rez, t_hystory *hys, struct termios term)
+void	check_buf(char *buf, char **rez, t_hystory *hys)
 {
 	if (!strcmp(buf, "\177"))
-		*rez = do_if_backspace(term, *rez);
+		*rez = do_if_backspace(*rez);
 	else if (!(strcmp(buf, "\e[A")))
-		*rez = do_if_up(term, *rez, hys);
+		*rez = do_if_up(*rez, hys);
 	else if (!(strcmp(buf, "\e[B")))
-		*rez = do_if_down(term, *rez, hys);
+		*rez = do_if_down(*rez, hys);
 	else if (!(strcmp(buf, "\e[C")) || !(strcmp(buf, "\e[D")))
 		rez = rez;
 	else
@@ -18,7 +18,7 @@ void	check_buf(char *buf, char **rez, t_hystory *hys, struct termios term)
 	}
 }
 
-int	read_end_of_str(char **rez, t_hystory *hys, struct termios term)
+int	read_end_of_str(char **rez, t_hystory *hys)
 {
 	char	*buf;
 	int		rs;
@@ -32,7 +32,7 @@ int	read_end_of_str(char **rez, t_hystory *hys, struct termios term)
 		if (rs == -1)
 			return (-5);
 		buf[rs] = 0;
-		check_buf(buf, rez, hys, term);
+		check_buf(buf, rez, hys);
 		if (rez == NULL)
 			return (-5);
 		if (*buf == '\n' || strcmp(buf, "\4") == 0)
@@ -42,7 +42,7 @@ int	read_end_of_str(char **rez, t_hystory *hys, struct termios term)
 	return (strcmp(buf, "\4"));
 }
 
-int	main_cycle(char **rez, struct termios term, t_hystory *hys, char **env)
+int	main_cycle(char **rez, t_hystory *hys, char **env)
 {
 	int		buf;
 	t_list	*list;
@@ -55,7 +55,7 @@ int	main_cycle(char **rez, struct termios term, t_hystory *hys, char **env)
 		**rez = 0;
 		tputs(save_cursor, 1, ft_putchar);
 		hys->count = count_str_in_array(hys->array);
-		buf = read_end_of_str(rez, hys, term);
+		buf = read_end_of_str(rez, hys);
 		if (buf == -5)
 			return (0);
 		if (buf == 0)
@@ -69,7 +69,7 @@ int	main_cycle(char **rez, struct termios term, t_hystory *hys, char **env)
 	return (1);
 }
 
-int	start_minishell(struct termios term, char **env)
+int	start_minishell(char **env)
 {
 	char		*rez;
 	t_hystory	hystory;
@@ -78,7 +78,7 @@ int	start_minishell(struct termios term, char **env)
 	if (rez == NULL)
 		return (0);
 	hystory.array = NULL;
-	if (main_cycle(&rez, term, &hystory, env) == 0)
+	if (main_cycle(&rez, &hystory, env) == 0)
 		return (0);
 	return (1);
 }

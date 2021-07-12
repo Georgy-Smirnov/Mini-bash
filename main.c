@@ -72,10 +72,16 @@ int	main(int argc, char **argv, char **env)
 
 	signal(SIGQUIT, myquit);
 	signal(SIGINT, mysigint);
-	if (!term_my_ref(term, 1, env))
-		return (0);
-	if (start_minishell(term, env) != 1)
-		return (0);
-	if (!term_my_ref(term, 2, env))
-		return (0);
+	if (argc == 1 && argv[0])
+	{
+		if (!term_my_ref(term, 1, env))
+			return (1);
+		if (start_minishell(env) != 1)
+			return (1);
+		if (!term_my_ref(term, 2, env))
+			return (1);
+	}
+	else
+		write(1, "Start minishell without arguments!\n", 35);
+	return (0);
 }

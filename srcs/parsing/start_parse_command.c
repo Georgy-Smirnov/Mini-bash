@@ -43,7 +43,6 @@ int	check_flags(t_all *all, char *str, int *i)
 int	put_arguments(t_all *all, t_list *list, char *str, int *i)
 {
 	char	*one_arg;
-	char	*tmp;
 
 	*i = skip_space(str, *i);
 	one_arg = put_end_of_string();

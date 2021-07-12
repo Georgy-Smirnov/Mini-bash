@@ -76,11 +76,11 @@ typedef struct		s_hystory
 		int	count;
 }					t_hystory;
 
-int		start_minishell(struct termios term, char **env);
+int		start_minishell(char **env);
 
-char	*do_if_backspace(struct termios term, char *rez);
-char	*do_if_up(struct termios term, char *rez, t_hystory *hystory);
-char	*do_if_down(struct termios term, char *rez, t_hystory *hystory);
+char	*do_if_backspace(char *rez);
+char	*do_if_up(char *rez, t_hystory *hystory);
+char	*do_if_down(char *rez, t_hystory *hystory);
 int		ft_putchar(int c);
 char	*put_end_of_string(void);
 int		work_with_fd(t_all *all, int i);
@@ -103,7 +103,7 @@ void	parse_command(t_all *all, t_list *list);
 t_list	*create_list(char **envp);
 void	output_list(t_list *list, t_all *all, int i);
 void	get_pwd(t_all *all, int i);
-void    get_exit(t_all *all);
+void    get_exit(void);
 void	dup_fd(t_all *all, int i);
 void	close_fd(t_all *all, int i);
 void	ft_echo(t_all * all, int i);

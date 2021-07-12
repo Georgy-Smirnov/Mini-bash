@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-char	*do_if_backspace(struct termios term, char *rez)
+char	*do_if_backspace(char *rez)
 {
 	if (ft_strlen(rez) > 0)
 	{
@@ -11,7 +11,7 @@ char	*do_if_backspace(struct termios term, char *rez)
 	return (rez);
 }
 
-char	*do_if_up(struct termios term, char *rez, t_hystory *hystory)
+char	*do_if_up(char *rez, t_hystory *hystory)
 {
 	if (hystory->count > 0)
 	{
@@ -27,7 +27,7 @@ char	*do_if_up(struct termios term, char *rez, t_hystory *hystory)
 	return (rez);
 }
 
-char	*do_if_down(struct termios term, char *rez, t_hystory *hystory)
+char	*do_if_down(char *rez, t_hystory *hystory)
 {
 	if (hystory->count < count_str_in_array(hystory->array) - 1)
 	{

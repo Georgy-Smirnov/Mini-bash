@@ -37,10 +37,10 @@ all:			${NAME}
 
 ${NAME}:		${OBJS}
 				${MAKE} -C ./libft
-				${GCC} ${CFLAGS} -o ${NAME} ${OBJS} libft/Libft.a -ltermcap
+				${GCC} ${CFLAG} -o ${NAME} ${OBJS} libft/Libft.a -ltermcap
 
 %.o:			%.c
-				${GCC} ${CFLAGS} -c $< -o $@
+				${GCC} ${CFLAG} -c $< -o $@
 
 clean:
 			make clean -C ./libft

@@ -17,7 +17,7 @@ int	parse_for_normy(t_all *all, t_list *list, int i)
 	else if (all->com[i].cd)
 		chdir(all->arg->arguments[i + 1]);
 	else if (all->com[i].exit)
-		get_exit(all);
+		get_exit();
 	else if (all->com[i].another)
 		another_com(all, i);
 	else
