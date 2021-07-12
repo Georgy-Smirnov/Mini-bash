@@ -2,7 +2,13 @@
 
 void	myquit(int sig)
 {
-	(void)sig;
+	int		pid;
+	int		status;
+
+	pid = waitpid(-1, &status, WNOHANG);
+	if (pid && sig == SIGQUIT)
+		write(1, "Quit: 3", 7);
+	g_err = status;
 }
 
 void	mysigint(int sig)
@@ -17,6 +23,7 @@ void	mysigint(int sig)
 		write (1, "\e[1;32mMinishell% \e[0m", 22);
 		tputs(save_cursor, 1, ft_putchar);
 	}
+	g_err = status;
 }
 
 char	*put_term_name(char **env)
