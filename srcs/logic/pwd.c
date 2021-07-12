@@ -13,4 +13,5 @@ void	get_pwd(t_all *all, int i)
 	write(1, "\n", 1);
 	free(buf);
 	close_fd(all, i);
+	g_err = 0;
 }

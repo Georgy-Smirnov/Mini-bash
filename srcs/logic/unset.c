@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+void	print_errr(t_all *all)
+{
+	write(1, "env: ", 5);
+	write(1, all->arg->arguments[all->i], \
+		ft_strlen(all->arg->arguments[all->i]));
+	write(1, ": not a valid identifier\n", 28);
+	g_err = 1;
+}
+
 int	exist_value_env(t_all *all, t_list *list, char *value)
 {
 	t_list	*copy;
@@ -29,7 +38,7 @@ int	exist_value_env(t_all *all, t_list *list, char *value)
 	return (0);
 }
 
-void	unset(t_list *list, t_all *all)
+void	unset_n(t_list *list, t_all *all)
 {
 	t_list	*c;
 	t_list	*before;
@@ -55,5 +64,18 @@ void	unset(t_list *list, t_all *all)
 		free(c);
 		if (before->next != NULL)
 			before->next = after;
+	}
+}
+
+void	unset(t_list *list, t_all *all)
+{
+	if (all->arg->arguments[all->i] != NULL)
+	{
+		if (ft_isalpha(all->arg->arguments[all->i][0]))
+		{
+			unset_n(list, all);
+		}
+		else
+			print_errr(all);
 	}
 }

@@ -2,27 +2,29 @@
 
 void	check_build_in_command(t_all *all)
 {
-	if (!ft_strncmp(ARG[0], "export", 6) && ARG[1] == NULL)
+	if (!ft_strncmp(all->arg[all->count].arguments[0], "export", 6) \
+		&& all->arg[all->count].arguments[1] == NULL)
 		all->com[all->count].exp = 1;
-	else if (!ft_strncmp(ARG[0], "export", 6))
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "export", 6))
 	{
 		all->com[all->count].exp = 0;
 		all->com[all->count].exp_add = 1;
 	}
-	else if (!ft_strncmp(ARG[0], "unset", 5))
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "unset", 5))
 		all->com[all->count].unset = 1;
-	else if (!ft_strncmp(ARG[0], "env", 3))
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "env", 3))
 		all->com[all->count].env = 1;
-	else if (!ft_strncmp(ARG[0], "cd", 2))
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "cd", 2))
 		all->com[all->count].cd = 2;
-	else if (!ft_strncmp(ARG[0], "pwd", 3))
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "pwd", 3))
 		all->com[all->count].pwd = 1;
-	else if (!ft_strncmp(ARG[0], "exit", 4))
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "exit", 4))
 		all->com[all->count].exit = 1;
-	else if (!ft_strncmp(ARG[0], "echo", 4))
+	else if (!ft_strncmp(all->arg[all->count].arguments[0], "echo", 4))
 	{
 		all->com[all->count].echo = 1;
-		if (ARG[1] != NULL && !ft_strncmp(ARG[1], "-n", 2))
+		if (all->arg[all->count].arguments[1] != NULL && \
+			!ft_strncmp(all->arg[all->count].arguments[1], "-n", 2))
 			all->com[all->count].n = 1;
 	}
 }

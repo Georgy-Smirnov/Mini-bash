@@ -57,7 +57,8 @@ int	put_arguments(t_all *all, t_list *list, char *str, int *i)
 	if (*one_arg != 0)
 	{
 		one_arg = change_one_arg(one_arg, all, list);
-		ARG = add_in_array(ARG, one_arg);
+		all->arg[all->count].arguments = \
+			add_in_array(all->arg[all->count].arguments, one_arg);
 	}
 	check_build_in_command(all);
 	if (check_flags(all, str, i) == 0)

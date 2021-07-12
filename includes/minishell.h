@@ -15,8 +15,6 @@
 # include <sys/wait.h>
 # include "../libft/libft.h"
 
-# define ARG all->arg[all->count].arguments
-
 int	g_err;
 
 typedef struct s_for_normy

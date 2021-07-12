@@ -34,6 +34,7 @@ void	output_export(t_list *list)
 		}
 		copy = copy->next;
 	}
+	g_err = 0;
 }
 
 void	sort_export(t_list *list, t_all *all, int i)

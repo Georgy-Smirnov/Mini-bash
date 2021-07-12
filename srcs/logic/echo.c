@@ -14,4 +14,5 @@ void	ft_echo(t_all *all, int i)
 	}
 	write (1, "\n", 1);
 	close_fd(all, i);
+	g_err = 0;
 }
