@@ -30,16 +30,20 @@ void	parse_command(t_all *all, t_list *list)
 	int	i;
 
 	i = 0;
-	all->i = 1;
 	while (i <= all->count)
 	{
-		if (!(parse_for_normy(all, list, i)))
+		if ((i != 0 && all->flags[i - 1].less_than == 0 && \
+			all->flags[i - 1].greater_than == 0 && \
+			all->flags[i - 1].d_greater_than == 0) || i == 0)
 		{
-			write (1, "\e[1;31mMinishell% \e[0m", 22);
-			write(1, all->arg[i].arguments[0], \
-				ft_strlen(all->arg[i].arguments[0]));
-			write(1, ": command not found\n", 20);
-			g_err = 127;
+			if (!(parse_for_normy(all, list, i)))
+			{
+				write (1, "\e[1;31mMinishell% \e[0m", 22);
+				write(1, all->arg[i].arguments[0], \
+					ft_strlen(all->arg[i].arguments[0]));
+				write(1, ": command not found\n", 20);
+				g_err = 127;
+			}
 		}
 		if (all->flags[i].less_than == 1 || \
 			all->flags[i].greater_than == 1 || \

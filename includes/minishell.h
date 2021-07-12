@@ -80,7 +80,7 @@ char	*do_if_up(char *rez, t_hystory *hystory);
 char	*do_if_down(char *rez, t_hystory *hystory);
 int		ft_putchar(int c);
 char	*put_end_of_string(void);
-int		work_with_fd(t_all *all, int i);
+int		work_with_fd(t_all *all, int i, int *fd);
 char	*put_variable(char *str, int *i, t_list *list);
 char	*change_one_arg(char *one_arg, t_all *all, t_list *list);
 int		write_one_arg(char **one_arg, char *str, int *i, t_list *list);

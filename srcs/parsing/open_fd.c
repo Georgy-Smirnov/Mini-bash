@@ -90,13 +90,11 @@ int	do_if_greater_less(t_all *all, int *fd, char *tmp_str, int i)
 	return (1);
 }
 
-int	work_with_fd(t_all *all, int i)
+int	work_with_fd(t_all *all, int i, int *fd)
 {
 	char	*tmp_str;
 	int		tmp[2];
-	int		fd;
 
-	fd = -2;
 	tmp_str = NULL;
 	if (i < all->count)
 		tmp_str = put_name_file(all->arg[i + 1].arguments[0]);
@@ -106,7 +104,7 @@ int	work_with_fd(t_all *all, int i)
 		all->arg[i].fd[1] = tmp[1];
 		all->arg[i + 1].fd[0] = tmp[0];
 	}
-	if (do_if_greater_less(all, &fd, tmp_str, i) == 0)
+	if (do_if_greater_less(all, fd, tmp_str, i) == 0)
 		return (0);
 	if (i < all->count)
 		free(tmp_str);

@@ -32,11 +32,13 @@ void	check_build_in_command(t_all *all)
 int	open_fd(t_all *all)
 {
 	int	i;
+	int	fd;
 
 	i = 0;
+	fd = -2;
 	while (i < all->count)
 	{
-		if (work_with_fd(all, i) == 0)
+		if (work_with_fd(all, i, &fd) == 0)
 			return (0);
 		i++;
 	}
@@ -47,6 +49,7 @@ int	start_work_command(t_all *all, t_list *list)
 {
 	if (open_fd(all) == 0)
 		return (0);
+	all->i = 1;
 	parse_command(all, list);
 	return (1);
 }
