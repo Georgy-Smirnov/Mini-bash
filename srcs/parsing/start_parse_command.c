@@ -89,7 +89,7 @@ int	start_parse_command(char *str, t_list *list)
 	if (check_errors(str) == 0)
 		return (1);
 	all = create_struct();
-	i = 0;
+	i = skip_space(str, 0);
 	while (str[i])
 	{
 		if (do_with_arg(all, str, list, &i) == 0)
