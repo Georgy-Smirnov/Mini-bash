@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void echo_n(t_all *all, int i)
+void	echo_n(t_all *all, int i)
 {
 	int	j;
 
@@ -24,7 +24,8 @@ void	ft_echo(t_all *all, int i)
 	{
 		while (all->arg[i].arguments[j])
 		{
-			write(1, all->arg[i].arguments[j], ft_strlen(all->arg[i].arguments[j]));
+			write(1, all->arg[i].arguments[j], \
+				ft_strlen(all->arg[i].arguments[j]));
 			j++;
 			if (all->arg[i].arguments[j] != NULL)
 				write(1, " ", 1);

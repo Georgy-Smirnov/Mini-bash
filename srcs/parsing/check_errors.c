@@ -15,10 +15,23 @@ int	print_error(void)
 	return (0);
 }
 
+void	skip_char(int *i, char *str, char ch)
+{
+	(*i)++;
+	while (str[*i])
+	{
+		if (str[*i] == ch)
+			break ;
+		(*i)++;
+	}
+}
+
 int	cicle(int *i, int *j, char *str, char *last_char)
 {
 	while (str[*i])
 	{
+		if (str[*i] == '\'' || str[*i] == '"')
+			skip_char(i, str, str[*i]);
 		if (str[*i] != ';' && str[*i] != '|' && str[*i] != '<')
 			if (str[*i] != '>' && str[*i] != ' ')
 				(*j)++;
