@@ -37,7 +37,7 @@ SRCS		=	$(SRC)
 
 #===============================>COMPILATIONS<=================================#
 
-GCC			=	gcc
+GCC			=	clang
 
 CFLAGS		=	-Wall -Werror -Wextra
 
@@ -64,7 +64,6 @@ NAME		=	minishell
 all:			${NAME}
 
 ${NAME}:		${OBJS}
-				@${MAKE} -C ./libft
 				@${GCC} ${CFLAG} -o ${NAME} ${OBJS} ${LIB_HEAD} ${TREMCAP}
 				@printf "\033[2K\r${_GREEN} Minishell create: '${NAME}'. ${_END}✅\n"
 
@@ -82,12 +81,10 @@ norm:
 #====================================>CLEAN_RULES<=============================#
 
 clean:
-			@make clean -C ./libft
 			@rm -f ${OBJS}
 			@printf "\033[2K\r${_RED} '".o"' has been deleted. ${_END}🗑️\n"
 
 fclean:		clean
-			@make fclean -C ./libft
 			@rm -f ${NAME}
 			@printf "\033[2K\r${_RED} '"${NAME}"' has been deleted. ${_END}🗑️\n"
 
