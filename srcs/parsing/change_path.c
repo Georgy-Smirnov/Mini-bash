@@ -73,12 +73,17 @@ char	*change_one_arg(char *one_arg, t_all *all, t_list *list)
 
 	if (!our_func(one_arg))
 	{
-		tmp = surch_path(list, one_arg);
-		if (tmp != NULL && all->arg[all->count].arguments == NULL)
-		{
-			free(one_arg);
-			one_arg = tmp;
+		if (one_arg[0] == '/')
 			all->com[all->count].another = 1;
+		else
+		{
+			tmp = surch_path(list, one_arg);
+			if (tmp != NULL && all->arg[all->count].arguments == NULL)
+			{
+				free(one_arg);
+				one_arg = tmp;
+				all->com[all->count].another = 1;
+			}
 		}
 	}
 	return (one_arg);
